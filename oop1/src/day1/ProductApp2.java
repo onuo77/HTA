@@ -93,11 +93,41 @@ public class ProductApp2 {
 		
 		System.out.println();
 		
+		System.out.println("### products 배열에 저장된 모든 상품정보 출력하기 ###");
 		for(Product y : products) {
 			y.printInfo();
+			System.out.println(y);
 		}
-			
-
 		
+		System.out.println();
+		
+		System.out.println("### products 배열에 저장된 상품중에서 재고수량이 25개 이상인 상품의 정보만 출력하기");
+		for(Product z : products) {
+			if(z.stock >= 25) {
+				z.printInfo();
+			}
+		}
+		
+		System.out.println();
+		
+		System.out.println("### products 배열에 저장된 상품중에서 제품의 가격이 100만원 이상인 상품의 정보만 출력하기");
+		for(Product z : products) {
+			if(z.price >= 1000000) {
+				z.printInfo();
+			}
+		}
+		
+		System.out.println();
+		
+		System.out.println("### products 배열에 저장된 상품중에서 애플에서 제조한 상품정보만 출력하기");
+		/*
+		 * for(Product z : products) { if(z.maker.equals("애플")) { z.printInfo(); } }
+		 */
+		//위에 방법보다 아래 방법으로 하는게 좋음!!
+		for(Product item : products) {
+			if("애플".equals(item.maker)) {
+				item.printInfo();
+			}
+		}
 	}
 }
