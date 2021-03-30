@@ -35,7 +35,7 @@ public class Banking {
 	//멤버변수
 	Account[] accounts = new Account[5];
 	int savePosition = 0;
-	
+			
 	/**
 	 * 계좌번호, 예금주, 최초잔액, 비밀번호를 전달받아서, 신규 계좌정보를 배열에 저장한다.
 	 * @param accNo 계좌번호
