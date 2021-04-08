@@ -37,6 +37,17 @@ public class UserManagerApp {
 		System.out.println("### 신규 사용자 등록하기");
 		userManager.addNewUser("park", "박혁거세");
 		
+		System.out.println("------------------------------------------");
+		
+		System.out.println("### 등록된 사용자 삭제하기");
+		userManager.deleteUser("hong");
+		userManager.deleteUser("hong");
+		
+		User user3 = userManager.findUser("lee");
+		System.out.println(user3.getId() + ", " + user3.getName());
+		User user4 = userManager.findUser("kim");
+		System.out.println(user4.getId() + ", " + user4.getName());
+		
 		/*2번째 방법*/
 		//UserManager객체 생성, 생성자 메소드를 이용해서 UserRepository구현객체를
 		//UserManager의 repo변수에 전달하기

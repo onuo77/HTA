@@ -26,6 +26,7 @@ public class UserManager {
 		
 		User user = new User(id,name);
 		repo.saveUser(user);
+		System.out.println("### 신규 사용자 등록이 완료되었습니다.");
 	}
 	
 	//사용자 정보 삭제하기
@@ -37,6 +38,7 @@ public class UserManager {
 		}
 		
 		repo.removeUser(id);
+		System.out.println("### ["+id+"] 아이디 사용자가 삭제되었습니다.");
 	}
 	
 	//사용자 정보 조회하기
@@ -45,6 +47,15 @@ public class UserManager {
 		return savedUser;
 	}
 	
-	
+	//사용자 정보 변경하기
+	public void modifyUserInfo(User user) {
+		User savedUser = repo.getUserById(user.getId());
+		if(savedUser == null) {
+			System.out.println("지정된 아이디의 사용자가 존재하지 않습니다.");
+			return;
+		}
+		repo.updateUser(user);
+		System.out.println("###["+user.getId()+"] 아이디 사용자가의 정보가 변경되었습니다.");
+	}
 	
 }
