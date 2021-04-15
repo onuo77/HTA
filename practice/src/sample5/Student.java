@@ -11,20 +11,13 @@ public class Student {
 
 	public Student() {}
 	
-	public Student(String name, int kor, int eng, int math) {
-		this.name = name;
-		this.kor = kor;
-		this.eng = eng;
-		this.math = math;
-	}
-	
 	public Student(String name, int kor, int eng, int math, int total, int average) {
 		this.name = name;
 		this.kor = kor;
 		this.eng = eng;
 		this.math = math;
 		this.total = kor + eng + math;
-		this.average = total/3;
+		this.average = (kor + eng + math)/3;
 	}
 
 	public String getName() {
