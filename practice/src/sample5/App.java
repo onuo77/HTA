@@ -22,6 +22,49 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 		
 		while(true) {
+			System.out.println("-----------------------------------------------------------------");
+			System.out.println("[학생성적 관리 프로그램]");
+			System.out.println("1.학생성적 입력 2.학생성적 전체조회 3.학생정보 상세조회 4.학생정보 성적순 조회 0.종료");
+			System.out.println("-----------------------------------------------------------------");
+			
+			System.out.print("원하는 서비스를 선택하세요 : ");
+			int menuNo = sc.nextInt();
+			
+			if(menuNo == 1) {
+				System.out.println("[학생 성적정보 입력하기]");
+				
+				System.out.print("- 학생 이름을 입력하세요 : ");
+				String name = sc.next();
+				
+				System.out.print("- "+ name +"의 국어점수를 입력하세요 : ");
+				int kor = sc.nextInt();
+				
+				System.out.print("- "+ name +"의 영어점수를 입력하세요 : ");
+				int eng = sc.nextInt();
+				
+				System.out.print("- "+ name +"의 수학점수를 입력하세요 : ");
+				int math = sc.nextInt();
+
+				students.add(new Student(name, kor, eng, math));
+				
+				System.out.println("- "+ name +"의 성적정보가 등록되었습니다.");
+				
+			} else if(menuNo == 2) {
+				System.out.println("[학생성적 전체조회]");
+				System.out.println("학생이름\t국어점수\t영어점수\t수학점수\t총점\t평균");
+
+				for(Student student : students) {
+					System.out.println(student.getName()
+									   +student.getKor());
+				}
+				
+			} else if(menuNo == 3) {
+				
+			} else if(menuNo == 4) {
+				
+			} else if(menuNo == 0) {
+				
+			}
 			
 		}
 	}

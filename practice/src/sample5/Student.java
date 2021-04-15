@@ -10,7 +10,14 @@ public class Student {
 	private int average;
 
 	public Student() {}
-
+	
+	public Student(String name, int kor, int eng, int math) {
+		this.name = name;
+		this.kor = kor;
+		this.eng = eng;
+		this.math = math;
+	}
+	
 	public Student(String name, int kor, int eng, int math, int total, int average) {
 		this.name = name;
 		this.kor = kor;
