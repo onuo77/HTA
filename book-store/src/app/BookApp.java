@@ -1,14 +1,18 @@
 package app;
 
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import exception.BookStoreException;
-import repository.BookRepository;
 import service.BookStoreService;
 import vo.Book;
+import vo.User;
 
 public class BookApp {
+	DecimalFormat df = new DecimalFormat("#,###");
 
 	private BookStoreService service = new BookStoreService();
 	private Scanner scanner = new Scanner(System.in);
@@ -28,7 +32,6 @@ public class BookApp {
 				System.out.println();
 				
 				if (menuNo == 1) {
-					System.out.println("[도서 목록]");
 					displayAllBooks();
 					
 				} else if (menuNo == 2) {
@@ -43,7 +46,7 @@ public class BookApp {
 				
 			} else {
 				System.out.println("-----------------------------------------------------------------------");
-				System.out.println("1.도서목록  2.검색  3.주문  4.내정보  5.주문내역 6.로그아웃  0.종료");
+				System.out.println("1.도서목록  2.검색  3.주문  4.내정보  5.주문내역  6.로그아웃  0.종료");
 				System.out.println("-----------------------------------------------------------------------");
 				
 				System.out.print("메뉴 선택 > ");
@@ -54,7 +57,6 @@ public class BookApp {
 					displayAllBooks();
 					
 				} else if (menuNo == 2) {
-					
 					searchBook();
 					
 				} else if (menuNo == 3) {
@@ -90,12 +92,14 @@ public class BookApp {
 	 * 모든 책 정보 출력하기.
 	 */
 	private void displayAllBooks() {
+		System.out.println("[도서 목록]");
 		List<Book> bookList = service.getAllBookList();
 		System.out.println("책번호\t가격\t할인가격\t재고\t제목");
+		System.out.println("-----------------------------------------------");
 		for (Book book : bookList) {
 			System.out.print(book.getNo()+"\t");
-			System.out.print(book.getPrice()+"\t");
-			System.out.print(book.getDiscountPrice()+"\t");
+			System.out.print(df.format(book.getPrice())+"\t");
+			System.out.print(df.format(book.getDiscountPrice())+"\t");
 			System.out.print(book.getStock()+"\t");
 			System.out.println(book.getTitle());
 		}
@@ -123,7 +127,16 @@ public class BookApp {
 	 * 회원가입하기
 	 */
 	private void register() {
+		System.out.println("[회원가입]");
+		System.out.print("아이디 > ");
+		String id = scanner.next();
+		System.out.print("이름 > ");
+		String name = scanner.next();
+		System.out.print("비밀번호 > ");
+		String pw = scanner.next();
 		
+		User newUser = new User(id, name, pw, 0, "일반");
+		service.addNewUser(newUser);
 	}
 	
 	/**
@@ -140,10 +153,62 @@ public class BookApp {
 			System.out.println();
 			
 			if (searchMenuNo == 1) {
+				System.out.print("검색할 책 제목 > ");
+				String searchBookTitle = scanner.next();
+				List<Book> searchedBooks = service.searchBooksByTitle(searchBookTitle);
+				
+				System.out.println("책번호\t가격\t할인가격\t재고\t제목");
+				System.out.println("-----------------------------------------------");
+				for(Book books : searchedBooks) {
+					System.out.print(books.getNo()+"\t");
+					System.out.print(df.format(books.getPrice())+"\t");
+					System.out.print(df.format(books.getDiscountPrice())+"\t");
+					System.out.print(books.getStock()+"\t");
+					System.out.println(books.getTitle());
+				}
+				if(searchedBooks.isEmpty()) {
+					System.out.println("[안내] \'"+searchBookTitle+"\' 검색결과가 없습니다.");
+				}
 				
 			} else if (searchMenuNo == 2) {
+				System.out.print("검색할 책 카테고리 > ");
+				String searchBookCategory = scanner.next();
+				List<Book> searchedBooks = service.searchBooksByCategory(searchBookCategory);
+				
+				System.out.println("책번호\t카테고리\t가격\t할인가격\t재고\t제목");
+				System.out.println("-----------------------------------------------");
+				for(Book books : searchedBooks) {
+					System.out.print(books.getNo()+"\t");
+					System.out.print(books.getCategory()+"\t");
+					System.out.print(df.format(books.getPrice())+"\t");
+					System.out.print(df.format(books.getDiscountPrice())+"\t");
+					System.out.print(books.getStock()+"\t");
+					System.out.println(books.getTitle());
+				}
+				if(searchedBooks.isEmpty()) {
+					System.out.println("[안내] \'"+searchBookCategory+"\' 검색결과가 없습니다.");
+				}								
 				
 			} else if (searchMenuNo == 3) {
+				System.out.print("검색할 책의 최소가격 > ");
+				int minPrice = scanner.nextInt();
+				System.out.print("검색할 책의 최대가격 > ");
+				int maxPrice = scanner.nextInt();
+				
+				List<Book> searchedBooks = service.searchBooksByPrice(minPrice, maxPrice);
+				
+				System.out.println("책번호\t가격\t할인가격\t재고\t제목");
+				System.out.println("-----------------------------------------------");
+				for(Book books : searchedBooks) {
+					System.out.print(books.getNo()+"\t");
+					System.out.print(df.format(books.getPrice())+"\t");
+					System.out.print(df.format(books.getDiscountPrice())+"\t");
+					System.out.print(books.getStock()+"\t");
+					System.out.println(books.getTitle());
+				}
+				if(searchedBooks.isEmpty()) {
+					System.out.println("[안내] 검색결과가 없습니다.");
+				}		
 				
 			} else if (searchMenuNo == 0) {
 				break;
@@ -157,6 +222,12 @@ public class BookApp {
 	 * 책 주문하기
 	 */
 	private void orderBook() {
+		System.out.print("구매할 책 번호 > ");
+		int orderBookNo = scanner.nextInt();
+		System.out.print("구매수량 > ");
+		int orderAmount = scanner.nextInt();
+		service.orderBook(orderBookNo, orderAmount);
+		System.out.println("[안내] 주문이 완료되었습니다.");
 		
 	}
 	
@@ -164,21 +235,32 @@ public class BookApp {
 	 * 내 정보 보기
 	 */
 	private void displayMyInfo() {
-		
+		User myInfo = service.getMyInfo();
+		System.out.println("["+myInfo.getId()+"]님의 정보");
+		System.out.println("사용자아이디 : " + myInfo.getId());
+		System.out.println("이름 : " + myInfo.getName());
+		System.out.println("고객등급 : " + myInfo.getGrade());
+		System.out.println("포인트 : " + df.format(myInfo.getPoint()));
 	}
 	
 	/**
 	 * 내주문내역 보기
 	 */
 	private void displayMyOrderHistory() {
-		
+		List<Map<String,Object>> myOrderInfo = service.getMyOrderList();
+		for(Map<String,Object> map : myOrderInfo) {
+			for(Entry<String, Object> entry : map.entrySet()) {
+				System.out.println(entry.getKey() + " : " + entry.getValue());
+			}
+			System.out.println();
+		}
 	}
 	
 	/**
 	 * 로그아웃하기
 	 */
 	private void logout() {
-		
+		service.logout();
 	}
 	
 	/**

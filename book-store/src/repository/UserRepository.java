@@ -3,9 +3,11 @@ package repository;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.UserException;
 import vo.User;
 
 public class UserRepository {
@@ -25,7 +27,7 @@ public class UserRepository {
 	 * @param user 사용자정보
 	 */
 	public void insertUser(User user) {
-		
+		db.add(user);
 	}
 	
 	/**
@@ -34,15 +36,14 @@ public class UserRepository {
 	 * @return 사용자정보가 포함된 User객체, 사용자정보가 존재하지 않으면 null을 반환한다.
 	 */
 	public User getUserById(String userId) {
-		User savedId = null;
 		for(User user : db) {
 			if(user.getId().equals(userId)) {
-				savedId = user;
+				return user;
 			}
 			
 		}
+		return null;
 		
-		return savedId;
 	}
 	
 	/**
@@ -84,6 +85,24 @@ public class UserRepository {
 	 * 사용자정보를 저장한다.
 	 */
 	public void saveData() {
-		
+		try (PrintWriter writer = new PrintWriter("src/users.csv")){
+			for(User user : db) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(user.getId())
+				  .append(",")
+				  .append(user.getName())
+				  .append(",")
+				  .append(user.getPassword())
+				  .append(",")
+				  .append(user.getPoint())
+				  .append(",")
+				  .append(user.getGrade());
+				
+				String text = sb.toString();
+				writer.println(text);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -4,6 +4,7 @@ package repository;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,11 @@ public class BookRepository {
 	 * @return 도서
 	 */
 	public Book getBookByNo(int no) {
+		for(Book book : db) {
+			if(book.getNo() == no) {
+				return book;
+			}
+		}
 		return null;
 	}
 	
@@ -67,6 +73,31 @@ public class BookRepository {
 	}
 	
 	public void saveData() {
-		
+		try (PrintWriter writer = new PrintWriter("src/books.csv")){
+			for(Book book : db) {
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append(book.getNo())
+				  .append(",")
+				  .append(book.getCategory())
+				  .append(",")
+				  .append(book.getTitle())
+				  .append(",")
+				  .append(book.getWriter())
+				  .append(",")
+				  .append(book.getPublisher())
+				  .append(",")
+				  .append(book.getPrice())
+				  .append(",")
+				  .append(book.getDiscountPrice())
+				  .append(",")
+				  .append(book.getStock());
+				
+				String text = sb.toString();
+				writer.println(text);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

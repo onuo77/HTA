@@ -1,8 +1,12 @@
 package service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import exception.BookException;
 import exception.UserException;
 import repository.BookRepository;
 import repository.OrderRepository;
@@ -13,6 +17,8 @@ import vo.User;
 
 public class BookStoreService {
 
+	DecimalFormat df = new DecimalFormat("#,###");
+	
 	private BookRepository bookRepository = new BookRepository();
 	private UserRepository userRepository = new UserRepository();
 	private OrderRepository orderRepository = new OrderRepository();
@@ -36,7 +42,14 @@ public class BookStoreService {
 	 * @return 도서 목록
 	 */
 	public List<Book> searchBooksByCategory(String category) {
-		return null;
+		ArrayList<Book> bookByCategory = new ArrayList<>();
+		List<Book> books = bookRepository.getAllBooks();
+		for(Book b : books) {
+			if(category.equals(b.getCategory())) {
+				bookByCategory.add(b);
+			}
+		}
+		return bookByCategory;
 	}
 	
 	/**
@@ -46,7 +59,14 @@ public class BookStoreService {
 	 * @return 도서 목록
 	 */
 	public List<Book> searchBooksByTitle(String title) {
-		return null;
+		ArrayList<Book> bookByTitle = new ArrayList<>();
+		List<Book> books = bookRepository.getAllBooks();
+		for(Book b : books) {
+			if(b.getTitle().contains(title)) {
+				bookByTitle.add(b);
+			}
+		}
+		return bookByTitle;
 	}
 	
 	/**
@@ -57,7 +77,14 @@ public class BookStoreService {
 	 * @return 도서 목록
 	 */
 	public List<Book> searchBooksByPrice(int minPrice, int maxPrice) {
-		return null;
+		ArrayList<Book> bookByPriceRange = new ArrayList<>();
+		List<Book> books = bookRepository.getAllBooks();
+		for(Book b : books) {
+			if(b.getPrice() >= minPrice && b.getPrice() <= maxPrice) {
+				bookByPriceRange.add(b);
+			}
+		}
+		return bookByPriceRange;
 	}
 	
 	/**
@@ -83,7 +110,12 @@ public class BookStoreService {
 	 * @param user 새 사용자
 	 */
 	public void addNewUser(User user) {
-		
+		User duplicatedUser = userRepository.getUserById(user.getId());
+		if(duplicatedUser != null) {
+			throw new UserException("[안내] 이미 등록된 아이디입니다.");
+		}
+		userRepository.insertUser(user);
+		System.out.println("[안내] 회원가입이 완료되었습니다.");
 	}
 	
 	/**
@@ -92,17 +124,13 @@ public class BookStoreService {
 	 * @param password 비밀번호
 	 */
 	public void login(String id, String password){
-//		전달받은 아이디에 해당하는 사용자정보를 UserRepository객체의 getUserById(아이디)메소드를 이용해서 획득하기
-//        사용자정보가 존재하지 않으면 UserException 발생시키기 - 아이디 혹은 비밀번호가 일치하지 않습니다.
-//        비밀번호가 일치하지 않으면 UserException 발생시키기 - 아이디 혹은 비밀번호가 일치하지 않습니다.
-//        획득한 사용자정보를 BookStoreService의 loginedUser에 저장한다.
 
 		User savedLogin = userRepository.getUserById(id);
 		if(savedLogin == null) {
-			throw new UserException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+			throw new UserException("[안내] 아이디 혹은 비밀번호가 일치하지 않습니다.");
 		}
 		if(!savedLogin.getPassword().equals(password)) {
-			throw new UserException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+			throw new UserException("[안내] 아이디 혹은 비밀번호가 일치하지 않습니다.");
 		}
 		System.out.println("[안내] 로그인 되었습니다.");
 		loginedUser = savedLogin;
@@ -112,7 +140,7 @@ public class BookStoreService {
 	 * 로그인된 사용자 정보를 초기화하는 기능
 	 */
 	public void logout() {
-		
+		loginedUser = null;
 	}
 	
 	/**
@@ -133,6 +161,38 @@ public class BookStoreService {
 	 * @param amount 주문수량
 	 */
 	public void orderBook(int bookNo, int amount) {
+		if(loginedUser == null) {
+			throw new UserException("[안내] 로그인이 필요한 서비스입니다.");
+		}
+
+		Book searchBooks = bookRepository.getBookByNo(bookNo);
+		
+		if(searchBooks == null) {
+			throw new BookException("[안내] 책번호가 올바르지 않습니다.");
+		}
+		if(searchBooks.getStock() < amount) {
+			throw new BookException("[안내] 재고량이 부족합니다.");
+		}
+		
+		Order orderBooks = new Order(loginedUser.getId(), bookNo, amount);
+		orderRepository.insertOrder(orderBooks);
+		
+		int stock = searchBooks.getStock() - amount;		//-= 안되는이유
+		searchBooks.setStock(stock);
+		int point = (int) ((searchBooks.getPrice()*amount) * 0.01);
+		loginedUser.setPoint(point);
+		int userPoint = loginedUser.getPoint();
+		// 일반 :                 ~    99,999
+		// 로얄 :      100,000    ~   999,999
+		// 골드 :    1,000,000    ~ 4,999,999
+		// 플레티넘 : 5,000,000
+		if(userPoint >= 100_000 && userPoint <= 999_999) {
+			loginedUser.setGrade("로얄");
+		} else if (userPoint >= 1_000_000 && userPoint <= 4_999_999){
+			loginedUser.setGrade("골드");
+		} else if (userPoint >= 5_000_000) {
+			loginedUser.setGrade("플래티넘");
+		}
 		
 	}
 	
@@ -140,8 +200,37 @@ public class BookStoreService {
 	 * 로그인한 사용자의 주문내역을 조회하는 기능
 	 * @return 주문 목록
 	 */
-	public List<Order> getMyOrderList() {
-		return null;
+	public List<Map<String,Object>> getMyOrderList() {
+		if(loginedUser == null) {
+			throw new UserException("[안내] 로그인이 필요한 서비스입니다.");
+		}
+
+		ArrayList<Map<String,Object>> savedOrderDetailList = new ArrayList<Map<String,Object>>();
+		List<Order> allOrderList = orderRepository.getAllOrders();
+		
+		int savedBookNo = 0;
+		for (Order order : allOrderList) {
+			if(loginedUser.getId().equals(order.getUserId())) {
+				savedBookNo = order.getBookNo();
+				
+				Book bookInfoByNo = bookRepository.getBookByNo(savedBookNo);
+				
+				LinkedHashMap<String, Object> orderDetail = new LinkedHashMap<String, Object>();
+				
+				int totalPrice = bookInfoByNo.getPrice() * order.getAmount();
+				int savedPoint = (int) (totalPrice * 0.01);
+				
+				orderDetail.put("책번호", order.getBookNo());
+				orderDetail.put("책제목", bookInfoByNo.getTitle());
+				orderDetail.put("구매수량", order.getAmount());
+				orderDetail.put("총 구매가격", df.format(totalPrice));
+				orderDetail.put("적립되는 포인트", df.format(savedPoint));
+				
+				savedOrderDetailList.add(orderDetail);
+			}
+		}
+		
+		return savedOrderDetailList;
 	}
 	
 	/**
@@ -149,14 +238,19 @@ public class BookStoreService {
 	 * @return
 	 */
 	public User getMyInfo() {
-		return null;
+		if(loginedUser == null) {
+			throw new UserException("[안내] 로그인이 필요한 서비스입니다.");
+		}
+		return loginedUser;
 	}
 	
 	/**
 	 * 모든 정보를 저장하는 기능
 	 */
 	public void restore() {
-		
+		userRepository.saveData();
+		bookRepository.saveData();
+		orderRepository.saveData();
 	}
 }
 
