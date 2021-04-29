@@ -1,6 +1,7 @@
 -- employees 테이블에서 관리자(상사)의 사원아이디를 중복없이 조회하기
 select DISTINCT manager_id
-from employees;
+from employees
+where manager_id is not null;
 
 -- employees 테이블에 등록된 사원들이 소속된 부서아이디를 중복없이 조회하기
 -- (소속부서가 없는 사원은 제외시킨다.)
@@ -17,9 +18,16 @@ select employee_id, first_name
 from employees
 where first_name like 'A%';
 
+select employee_id, first_name
+from employees
+where substr(first_name,1,1) = 'A'; -- 이것도 되는데 위에꺼 쓰는게 좋음
+
 -- employees 테이블에서 모든 사원들의 아이디, 이름, 급여, 연간 총 수입을 조회하기
 -- 연간 총수입은 급여*12 + (급여*12*commission_pct)다.
 select employee_id, first_name, salary, salary*12 + (salary*12*commission_pct) annual_salary
+from employees;
+
+select employee_id, first_name, salary, salary*12 + salary*12*nvl(commission_pct,0) annual_salary
 from employees;
 
 -- employees 테이블에서 80번 부서에서 근무중인 사원들의 사원아이디, 이름, 급여, 세금을 조회하기
@@ -50,6 +58,10 @@ where first_name like 'A%'
     or first_name like 'J%'
     or first_name like 'M%';
 
+select employee_id, first_name
+from employees
+where substr(first_name,1,1) in ('A','J','M');
+
 -- employees 테이블에서 근무를 시작한 날로부터 오늘까지 근무한 개월수를 계산해서 조회하기
 -- 사원아이디, 이름, 입사일, 근무한 개월수(개월수는 정수로 반올림한다.)만 조회한다.
 select employee_id, first_name, hire_date, 
@@ -62,5 +74,5 @@ from employees;
 -- 101 김유신 15000 ***************
 -- 102 강감찬 7300  *******
 select employee_id, first_name, salary, 
-    rpad('*', salary/1000, '*') secret_salary
+    rpad('*', trunc(salary/1000), '*') secret_salary
 from employees;
