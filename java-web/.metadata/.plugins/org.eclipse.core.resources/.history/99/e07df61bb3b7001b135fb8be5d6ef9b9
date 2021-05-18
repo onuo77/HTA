@@ -1,0 +1,11 @@
+package com.sample.vo;
+
+public class Sample {
+
+	private int no;
+	private String name;
+	private String company;
+	private int price;
+	private int stock;
+	
+}
