@@ -1,0 +1,24 @@
+package com.sample.hr.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.sample.hr.vo.Employee;
+
+/**
+ * EMPLOYEES 테이블에 대한 CRUD를 제공하는 클래스다.
+ * @author user
+ *
+ */
+public class EmployeeDao {
+
+	public List<Employee> getEmployeeByDepartmentId() throws SQLException{
+		List<Employee> employees = new ArrayList<employee>();
+		
+		String sql = "select * "
+					+"from employees "
+					+"where department_id = ? ";
+		
+		return employees;
+	}
+}

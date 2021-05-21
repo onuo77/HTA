@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Employee {
 
-	private int id;
+	private int id; //0이 아니라 null값으로 띄우고 싶은 경우 Integer로 하기
 	private String firstName;
 	private String lastName;
 	private String email;

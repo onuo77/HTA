@@ -1,0 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	//요청파라미터값 조회
+	//Department객체를 생성해서 신규 부서정보 저장
+	//DepartmentDao의 insertDepartment(Department dept)를 실행해서 새 부서정보 추가
+	
+	
+	//브라우저가 다시 요청할 URL을 응답으로 보낸다. (Redirection 응답)
+%>

@@ -1,0 +1,23 @@
+package com.sample.hr.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.sample.hr.vo.Location;
+
+/**
+ * LOCATIONS 테이블에 대한 CRUD기능을 제공하는 클래스다.
+ * @author user
+ *
+ */
+public class LocationDao {
+
+	/**
+	 * 모든 부서 소재지 정보를 반환한다.
+	 * @return 부서소재지 목록
+	 * @throws SQLException
+	 */
+	public List<Location> getAllLocations() throws SQLException{
+		
+	}
+}

@@ -21,7 +21,7 @@
 		<%
 			for(Department dept : departments){
 		%>
-			<li><a href=""><%=dept.getName() %></a></li>
+			<li><a href="detail.jsp?deptId=<%=dept.getId()%>"><%=dept.getName() %></a></li>
 		<% 
 			} 
 		%>
