@@ -6,17 +6,20 @@
     <fullyQualifiedTypeName name="com.sample.hr.dto.DepartmentDto"/>
     <fullyQualifiedTypeName name="sun.security.rsa.RSACore"/>
     <fullyQualifiedTypeName name="com.sample.hr.vo.Location"/>
-    <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="com.sample.hr.dto.EmployeeDto"/>
     <fullyQualifiedTypeName name="com.sample.hr.dao.JobDao"/>
     <fullyQualifiedTypeName name="com.sample.hr.vo.Job"/>
     <fullyQualifiedTypeName name="com.sample.hr.vo.Department"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.sql.Connection"/>
     <fullyQualifiedTypeName name="com.sample.utils.ConnectionUtil"/>
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="java.sql.ResultSet"/>
     <fullyQualifiedTypeName name="com.sample.hr.vo.Employee"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="org.apache.ibatis.session.SqlSessionFactory"/>
+    <fullyQualifiedTypeName name="com.sample.util.MybatisUtils"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="org.apache.ibatis.session.SqlSession"/>
 </qualifiedTypeNameHistroy>

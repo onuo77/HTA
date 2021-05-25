@@ -1,0 +1,14 @@
+package com.sample.dao;
+
+import com.sample.vo.Product;
+
+public class ProductDao {
+	
+	/**
+	 * 새 상품정보를 전달받아서 SAMPLE_PRODUCTS 테이블에 추가한다.
+	 * @param product 새 상품정보
+	 */
+	public void insertProduct(Product product) {
+
+	}
+}

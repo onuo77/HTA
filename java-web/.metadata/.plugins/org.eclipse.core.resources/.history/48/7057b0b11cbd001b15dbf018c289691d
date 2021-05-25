@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="products">
+
+	<!-- 
+		새 상품정보를 추가하는 SQL 매핑정보 정의하기
+		1. INSERT 구문의 정의한다.
+		2. INSERT 구문의 식별자 이름을 "insertProduct"로 정의한다.
+		3. INSERT 구문을 실행하는 필요한 값은 com.sample.vo.Product객체로 전달받는다.
+		4. INSERT 구문 실행시 #{}으로 표시된 곳에 실제값이 치환된다.
+			* #{name}은 com.sample.vo.Product객체의 name변수에 저장된 값이 치환된다.
+			* #{maker}은 com.sample.vo.Product객체의 maker변수에 저장된 값이 치환된다.
+			* #{category}은 com.sample.vo.Product객체의 category변수에 저장된 값이 치환된다.
+			* #{price}은 com.sample.vo.Product객체의 price변수에 저장된 값이 치환된다.
+			* #{discountPrice}은 com.sample.vo.Product객체의 discountPrice변수에 저장된 값이 치환된다.
+	 -->
+	 
+	 <insert id="insertProduct" parameterType="com.sample.vo.Product">
+	 	insert into sample_products
+	 	(product_no, product_name, product_maker, product_category, product_price, product_discount_price)
+	 	values
+	 	(product_seq.nextval,#{name},#{maker},#{category},#{price},#{discountPrice})
+	 </insert>
+</mapper>

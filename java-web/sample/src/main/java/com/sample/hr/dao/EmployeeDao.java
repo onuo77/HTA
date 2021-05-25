@@ -80,6 +80,11 @@ public class EmployeeDao {
 		return employees;
 	}
 	
+	/**
+	 * 모든 사원정보를 반환한다.
+	 * @return 사원정보 목록
+	 * @throws SQLException
+	 */
 	public List<Employee> getAllEmployees() throws SQLException{
 		List<Employee> employees = new ArrayList<Employee>();
 		

@@ -49,6 +49,9 @@
 	empDao.insertEmployee(emp);
 	
 	//브라우저가 다시 요청할 URL을 응답으로 보낸다. (Redirection 응답)
+	//insert,update,delete 작업을 수행한 후에는 클라이언트에게 재요청할 URL을 응답으로 보낸다.
+	//HttpServletResponse(응답객체)의 sendRedirect(url)을 실행하면 재요청 URL을 응답으로 보낼 수 있다.
 	response.sendRedirect("list.jsp");
 
+	System.out.println("##신규사원정보" + emp);
 %>

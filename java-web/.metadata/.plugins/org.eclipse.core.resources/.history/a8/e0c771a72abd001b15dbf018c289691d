@@ -1,0 +1,28 @@
+package com.sample.dao;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import com.sample.util.MybatisUtils;
+import com.sample.vo.Product;
+
+public class ProductDao {
+	
+	private SqlSessionFactory sqlSessionFactory;
+	
+	private static ProductDao instance = new ProductDao();
+	private ProductDao() {
+		this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory();
+	}
+	public static ProductDao getInstance() {
+		return instance;
+	}
+	
+	/**
+	 * 새 상품정보를 전달받아서 SAMPLE_PRODUCTS 테이블에 추가한다.
+	 * @param product 새 상품정보
+	 */
+	public void insertProduct(Product product) {
+		
+	}
+	
+}
