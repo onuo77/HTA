@@ -1,0 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	/*
+		1. 요청객체에서 모든 요청 파라미터값을 조회한다.
+		2. Product객체를 생성해서 요청파라미터값을 저장한다.
+		   * 할인가격은 정상가격에서 10% 할인된 가격이다.
+	*/
+	
+	String name = request.getParameter("name");
+%>
