@@ -1,0 +1,18 @@
+<%@page import="com.sample.util.CommonUtils"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.sample.vo.User"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+
+	//로그인 여부 체크하기
+	User sessionSavedUser = (User) session.getAttribute("LOGINED_USER_INFO");
+	if(sessionSavedUser == null){
+		String encodedText = URLEncoder.encode("장바구니 아이템삭제", "utf-8");
+		response.sendRedirect("../user/loginform.jsp?fail=deny&job=" + encodedText);
+		return;		
+	}
+	
+	//요청파라미터에서 아이템번호를 조회한다.
+	int itemNo = CommonUtils.stringToInt(request.getParameter("no"));
+%>

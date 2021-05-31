@@ -17,31 +17,28 @@
 <div class="container">
 <%
 	String navItem = "product";	
+
+	// list.jsp에서 "detail.jsp?no=상품번호&page=페이지번호"의 형식으로 요청할 때 전달된 요청파라미터값 조회하기
+	int productNo = CommonUtils.stringToInt(request.getParameter("no"));
+	int pageNo = CommonUtils.stringToInt(request.getParameter("page"), 1);
+	
+	// SAMPLE_PRODUCTS테이블에 대한 CRUD기능이 구현된 ProductDao객체 획득하기
+	ProductDao productDao = ProductDao.getInstance();
+	// ProductDao객체의 getProductByNo(상품번호)를 실행해서 상품정보를 조회한다.
+	Product product = productDao.getProductByNo(productNo);
 %>
 	<header>
 		<%@ include file="../common/header.jsp" %>
 	</header>
 	<main>
-	<%
-		//list.jsp에서 "detail.jsp?no=상품번호"의 형식으로 요청할 때 전달된 요청파라미터값 조회하기
-		//int no = Integer.parseInt(request.getParameter("no"));
-		int no = CommonUtils.stringToInt(request.getParameter("no"));
-		//list.jsp에서 "detail.jsp?no=상품번호&page=페이지번호"의 형식으로 요청할 때 전달된 요청파라미터값 조회하기
-		int pageNo = CommonUtils.stringToInt(request.getParameter("page"),1); //jsp안에서는 page란 변수명 사용하면 안됨
-		
-		//SAMPLE_PRODUCTS테이블에 대한 CRUD기능이 구현된 ProductDao객체 획득하기
-		ProductDao pdDao = ProductDao.getInstance();
-		//ProductDao객체의 getProductByNo(상품번호)를 실행해서 상품정보를 조회한다.
-		Product product = pdDao.getProductByNo(no);
-	%>
 		<div class="row mb-3"> <!-- mb-3은 아래쪽 여백을 3만큼 설정한다. -->
 			<div class="col-12">
 				<h3 class="border p-3 bg-light">상품 상세정보</h3>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row mb-3">
 			<div class="col-12">
-				<table class="table table-bordered">
+				<table class="table table-bordered table-sm">
 					<colgroup>
 						<col width="15%">
 						<col width="35%">
@@ -62,16 +59,66 @@
 					</tr>
 					<tr>
 						<th class="bg-light">재고수량</th><td><%=CommonUtils.numberToString(product.getStock()) %> 개</td>
-						<th class="bg-light">절판여부</th><td><strong class="text-primary"><%=product.getSoldOutMessage() %></strong></td>
+						<th class="bg-light">품절여부</th><td><strong class="text-primary"><%=product.getSoldOutMessage() %></strong></td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div>
-			<a href="modifyform.jsp?no=<%=product.getNo() %>" class="btn btn-warning">수정</a>
-			<a href="remove.jsp?no=<%=product.getNo() %>" class="btn btn-danger">삭제</a>			
-			<a href="list.jsp?page=<%=pageNo %>" class="btn btn-primary float-right">목록</a>
+		<!-- 리뷰 등록폼 시작 -->
+		<div class="row mb-2">
+			<div class="col-12">
+				<form method="post" action="insertreview.jsp" class="border bg-light p-2">
+					<input type="hidden" name="productNo" value="상품번호">
+					<input type="hidden" name="page" value="페이지번호">
+					<div class="form-group row">
+						<div class="col-11">
+							<input type="text" class="form-control" name="title" placeholder="리뷰 제목을 입력하세요"/>
+						</div>
+						<div class="col-1">
+							<button class="btn btn-primary">등록</button>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-11">
+							<textarea rows="2" class="form-control" name="content" placeholder="리뷰 내용을 입력하세요"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
+		<!-- 리뷰 등록폼 끝 -->
+		
+		<!-- 리뷰 목록 시작 -->
+		<div class="row">
+			<div class="col-12">
+				<div class="list-group">
+					<!-- 리뷰 아이템 반복 시작-->
+					<li class="list-group-item">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">리뷰제목 제목</h5>
+							<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
+						</div>
+						<p>리뷰내용 내용 내용</p>
+					</li>
+					<!-- 리뷰 아이템 반복 끝 -->
+					<li class="list-group-item">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">리뷰제목 제목</h5>
+							<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
+						</div>
+						<p>리뷰내용 내용 내용</p>
+					</li>
+					<li class="list-group-item">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">리뷰제목 제목</h5>
+							<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
+						</div>
+						<p>리뷰내용 내용 내용</p>
+					</li>
+				</div>
+			</div>
+		</div>
+		<!-- 리뷰목록 끝 -->
 	</main>
 </div>
 </body>
