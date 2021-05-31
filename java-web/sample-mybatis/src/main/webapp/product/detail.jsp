@@ -1,3 +1,7 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.util.List"%>
+<%@page import="com.sample.vo.Review"%>
+<%@page import="com.sample.dao.ReviewDao"%>
 <%@page import="com.sample.util.CommonUtils"%>
 <%@page import="com.sample.vo.Product"%>
 <%@page import="com.sample.dao.ProductDao"%>
@@ -65,11 +69,15 @@
 			</div>
 		</div>
 		<!-- 리뷰 등록폼 시작 -->
+		
+		<%
+			if(loginedUser != null){
+		%>
 		<div class="row mb-2">
 			<div class="col-12">
 				<form method="post" action="insertreview.jsp" class="border bg-light p-2">
-					<input type="hidden" name="productNo" value="상품번호">
-					<input type="hidden" name="page" value="페이지번호">
+					<input type="hidden" name="productNo" value="<%=productNo %>">
+					<input type="hidden" name="page" value="<%=pageNo%>">
 					<div class="form-group row">
 						<div class="col-11">
 							<input type="text" class="form-control" name="title" placeholder="리뷰 제목을 입력하세요"/>
@@ -86,35 +94,58 @@
 				</form>
 			</div>
 		</div>
+		<%
+			}
+		%>
 		<!-- 리뷰 등록폼 끝 -->
-		
+		<%
+			ReviewDao reviewDao = ReviewDao.getInstance();
+			List<Review> reviews = reviewDao.getReviewsByProductNo(productNo);
+		%>
 		<!-- 리뷰 목록 시작 -->
 		<div class="row">
 			<div class="col-12">
 				<div class="list-group">
 					<!-- 리뷰 아이템 반복 시작-->
-					<li class="list-group-item">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">리뷰제목 제목</h5>
-							<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
-						</div>
-						<p>리뷰내용 내용 내용</p>
-					</li>
+					<ul class="list-group">
+					<%
+						if(loginedUser == null){
+							if(reviews.isEmpty()){							
+					%>
+						<li class="list-group-item text-center">
+							<h5 class="mb-1">등록된 리뷰가 없습니다. 로그인 후 리뷰를 등록하세요.</h5>
+						</li>
+					<%
+							}
+						}else if(loginedUser != null){
+							if(reviews.isEmpty()){
+					%>				
+						<li class="list-group-item text-center">
+								<h5 class="mb-1">등록된 리뷰가 없습니다. 리뷰를 등록하세요.</h5>
+						</li>				
+					<%
+							}else{for(Review review : reviews){
+					%>
+						<li class="list-group-item">
+							<div class="d-flex w-100 justify-content-between">
+								<h5 class="mb-1"><%=review.getTitle() %></h5>
+								<%
+									if(loginedUser != null && review.getUserId().equals(loginedUser.getId())){
+								%>
+								<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
+								<%
+									}
+								%>
+							</div>
+							<p><%=review.getContent() %></p>
+						</li>
+					<%
+								}
+							}
+						}
+					%>
+					</ul>	
 					<!-- 리뷰 아이템 반복 끝 -->
-					<li class="list-group-item">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">리뷰제목 제목</h5>
-							<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
-						</div>
-						<p>리뷰내용 내용 내용</p>
-					</li>
-					<li class="list-group-item">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">리뷰제목 제목</h5>
-							<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
-						</div>
-						<p>리뷰내용 내용 내용</p>
-					</li>
 				</div>
 			</div>
 		</div>

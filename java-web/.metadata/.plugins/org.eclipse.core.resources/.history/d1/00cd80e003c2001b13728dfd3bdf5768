@@ -1,0 +1,15 @@
+package com.sample.vo;
+
+import java.util.Date;
+
+public class Review {
+
+	private int no;
+	private String title;
+	private String content;
+	private int productNo;
+	private String userId;
+	private Date createdDate;
+	
+	
+}

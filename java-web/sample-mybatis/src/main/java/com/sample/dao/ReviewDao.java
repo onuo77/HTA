@@ -1,0 +1,45 @@
+package com.sample.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import com.sample.util.MybatisUtils;
+import com.sample.vo.Review;
+
+public class ReviewDao {
+
+	private SqlSessionFactory sqlSessionFactory;
+	
+	private static ReviewDao instance = new ReviewDao();
+	private ReviewDao() {
+		this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory();
+	}
+	
+	/**
+	 * 미리 생성된 ReviewDao 객체를 반환한다.
+	 * @return ReviewDao
+	 */
+	public static ReviewDao getInstance() {
+		return instance;
+	}
+	
+	public void insertReview(Review review) {
+		SqlSession session = sqlSessionFactory.openSession(true);
+		session.insert("insertReview", review);
+		session.close();
+	}
+	
+	/**
+	 * 상품번호로 전달받아서 해당하는 상품정보의 SAMPLE_PRODUCT_REVIEWS 테이블에서 조회해서 반환한다.
+	 * @param no 상품번호
+	 * @return 리뷰 목록
+	 */
+	public List<Review> getReviewsByProductNo(int no) {
+		SqlSession session = sqlSessionFactory.openSession();
+		List<Review> reviews = session.selectList("getReviewsByProductNo",no);
+		session.close();
+		return reviews;
+	}
+}

@@ -1,0 +1,18 @@
+package com.sample.dao;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import com.sample.util.MybatisUtils;
+
+public class ReviewDao {
+
+	private SqlSessionFactory sqlSessionFactory;
+	
+	private static ReviewDao instance = new ReviewDao();
+	private ReviewDao() {
+		this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory();
+	}
+	
+	
+}

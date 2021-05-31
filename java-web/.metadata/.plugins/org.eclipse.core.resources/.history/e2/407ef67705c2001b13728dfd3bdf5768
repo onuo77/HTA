@@ -1,0 +1,29 @@
+package com.sample.dao;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import com.sample.util.MybatisUtils;
+
+public class ReviewDao {
+
+	private SqlSessionFactory sqlSessionFactory;
+	
+	private static ReviewDao instance = new ReviewDao();
+	private ReviewDao() {
+		this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory();
+	}
+	
+	/**
+	 * 미리 생성된 ReviewDao 객체를 반환한다.
+	 * @return ReviewDao
+	 */
+	public static ReviewDao getInstance() {
+		return instance;
+	}
+	
+	
+	public void allReviews() {
+		
+	}
+}
