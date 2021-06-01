@@ -28,7 +28,7 @@
 			<div class="col-12">
 				<form method="post" action="modify.jsp" class="border p-3 bg-light">
 					<input type="hidden" name="no" value="게시글번호">
-					<input type="hidden" name="page" value="페이지번호">					<
+					<input type="hidden" name="page" value="페이지번호">					
 					<div class="form-group">
 						<label>제목</label>
 						<input type="text" class="form-control" name="title" value="게시글의 원래 제목"/>

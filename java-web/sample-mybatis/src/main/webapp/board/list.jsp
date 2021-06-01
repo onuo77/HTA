@@ -1,3 +1,6 @@
+<%@page import="com.sample.vo.Board"%>
+<%@page import="java.util.List"%>
+<%@page import="com.sample.dao.BoardDao"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -14,6 +17,10 @@
 <div class="container">
 <%
 	String navItem = "board";
+	
+	BoardDao boardDao = BoardDao.getInstance();
+	Board board = new Board();
+	List<Board> boards = boardDao.getBoardListByDeleted(board.getDeleted());
 %>
 	<header>
 		<%@ include file="../common/header.jsp" %>
@@ -49,27 +56,26 @@
 								</tr>
 							</thead>
 							<tbody>
+							<%
+								if(boards.isEmpty()){
+							%>
 								<tr>
-									<td>1</td>
-									<td><a href="detail.jsp?no=1&page=1">게시글 연습1</a></td>
-									<td>관리자</td>
-									<td>10</td>
-									<td>2021-05-31</td>
+									<td colspan="5" class="text-center">게시글이 존재하지 않습니다.</td>
 								</tr>
+							<%
+								}
+								for(Board item : boards){
+							%>
 								<tr>
-									<td>2</td>
-									<td><a href="detail.jsp?no=2&page=1">게시글 연습2</a></td>
-									<td>관리자</td>
-									<td>10</td>
-									<td>2021-05-31</td>
+									<td><%=item.getNo() %></td>
+									<td><a href="detail.jsp?no=<%=item.getNo() %>&page=1">게시글 연습2</a></td>
+									<td><%=item.getUserId() %></td>
+									<td><%=item.getViewCount() %></td>
+									<td><%=item.getCreatedDate()%></td>
 								</tr>
-								<tr>
-									<td>3</td>
-									<td><a href="detail.jsp?no=2&page=1">게시글 연습3</a></td>
-									<td>관리자</td>
-									<td>10</td>
-									<td>2021-05-31</td>
-								</tr>
+							<%
+								}
+							%>
 							</tbody>
 						</table>
 					</div>

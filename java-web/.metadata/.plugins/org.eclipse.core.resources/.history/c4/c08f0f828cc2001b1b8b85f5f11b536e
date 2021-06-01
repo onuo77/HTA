@@ -1,0 +1,26 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.sample.vo.User"%>
+<%@page import="com.sample.util.CommonUtils"%>
+<%@page import="com.sample.dao.ReviewDao"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+
+	User sessionSavedUser = (User) session.getAttribute("LOGINED_USER_INFO");
+	
+	if(sessionSavedUser == null){
+		String encodedText = URLEncoder.encode("리뷰삭제하기", "utf-8")
+		response.sendRedirect("detail.jsp?no="+ productNo +"&page="+ pageNo);
+		return;		
+	}
+
+	int productNo = CommonUtils.stringToInt(request.getParameter("productNo"));
+	int pageNo = CommonUtils.stringToInt(request.getParameter("page"));
+	
+	int reviewNo = CommonUtils.stringToInt(request.getParameter("reviewNo"));
+
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	reviewDao.deletedReview(reviewNo);
+	
+	response.sendRedirect("detail.jsp?no="+ productNo +"&page="+ pageNo);
+%>

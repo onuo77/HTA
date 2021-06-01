@@ -65,7 +65,8 @@
 	  		product_price 			= #{price},
 	  		product_discount_price	= #{discountPrice},
 	  		product_stock			= #{stock},
-	  		product_sold_out 		= #{soldOut}
+	  		product_sold_out 		= #{soldOut},
+	  		product_review_cnt		= #{reviewCnt}
 	  	where product_no = #{no}
 	  </update>
 	  
@@ -93,7 +94,8 @@
 	  	 		product_discount_price 	as discountPrice,
 	  	 		product_stock 			as stock,
 	  	 		product_sold_out 		as soldOut,
-				product_created_date 	as createdDate
+				product_created_date 	as createdDate,
+				product_review_cnt		as reviewCnt
 	  	 from (select row_number() over (order by product_no desc) row_no, A.*
 	  	 		from sample_products A) 
 	  	 where row_no between #{beginIndex} and #{endIndex} <!-- #{}값은 parameterType에 map이 있으면 map의 key값 -->
@@ -129,7 +131,8 @@
 	  	 		product_discount_price as discountPrice,
 	  	 		product_stock as stock,
 	  	 		product_sold_out as soldOut,
-				product_created_date as createdDate
+				product_created_date as createdDate,
+				product_review_cnt as reviewCnt
 	  	 from sample_products
 	  	 where product_no = #{value}
 	   </select>
@@ -143,7 +146,8 @@
 	  	 		product_discount_price as discountPrice,
 	  	 		product_stock as stock,
 	  	 		product_sold_out as soldOut,
-				product_created_date as createdDate
+				product_created_date as createdDate,
+				product_review_cnt as reviewCnt
 	  	 from sample_products
 	  	 where product_name like '%' || #{value} || '%'
 	   </select>

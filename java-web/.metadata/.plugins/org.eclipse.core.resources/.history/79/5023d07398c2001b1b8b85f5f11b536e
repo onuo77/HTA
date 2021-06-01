@@ -1,0 +1,26 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.sample.vo.User"%>
+<%@page import="com.sample.util.CommonUtils"%>
+<%@page import="com.sample.dao.ReviewDao"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	//로그인 여부 체크
+	User sessionSavedUser = (User) session.getAttribute("LOGINED_USER_INFO");
+	if(sessionSavedUser == null){
+		String encodedText = URLEncoder.encode("리뷰삭제하기", "utf-8");
+		response.sendRedirect("../user/loginform.jsp?fail=deny&job="+encodedText);
+		return;		
+	}
+	
+	//deletereview.jsp?productNo=상품번호&page=페이지번호&reviewNo=리뷰번호
+	int productNo = CommonUtils.stringToInt(request.getParameter("productNo"));
+	int pageNo = CommonUtils.stringToInt(request.getParameter("page"));
+	int reviewNo = CommonUtils.stringToInt(request.getParameter("reviewNo"));
+
+	//SAMPLE_PRODUCT_REVIEWS 테이블에 대한
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	reviewDao.deletedReview(reviewNo);
+	
+	response.sendRedirect("detail.jsp?no="+ productNo +"&page="+ pageNo);
+%>

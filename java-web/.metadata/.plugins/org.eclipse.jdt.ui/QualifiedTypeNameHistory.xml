@@ -25,11 +25,13 @@
     <fullyQualifiedTypeName name="com.sample.dao.CartItemDao"/>
     <fullyQualifiedTypeName name="com.sample.vo.CartItem"/>
     <fullyQualifiedTypeName name="com.sample.dto.CartItemListDto"/>
-    <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="com.sample.dao.ReviewDao"/>
-    <fullyQualifiedTypeName name="com.sample.util.MybatisUtils"/>
     <fullyQualifiedTypeName name="com.sample.vo.Review"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="org.apache.ibatis.session.SqlSession"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="org.apache.ibatis.session.SqlSessionFactory"/>
+    <fullyQualifiedTypeName name="org.apache.ibatis.session.SqlSession"/>
+    <fullyQualifiedTypeName name="com.sample.vo.Board"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.sample.dao.BoardDao"/>
+    <fullyQualifiedTypeName name="com.sample.util.MybatisUtils"/>
 </qualifiedTypeNameHistroy>

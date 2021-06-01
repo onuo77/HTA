@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>상품몰</title>
+	<title>상품몰 :: 상품 상세정보</title>
  	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -35,14 +35,22 @@
 		<%@ include file="../common/header.jsp" %>
 	</header>
 	<main>
-		<div class="row mb-3"> <!-- mb-3은 아래쪽 여백을 3만큼 설정한다. -->
+		<!-- 
+		<div class="col-12 p-0 mb-3">
+			<a href="modifyform.jsp?no=<%=product.getNo() %>" class="btn btn-warning btn-sm">수정</a>
+			<a href="" class="btn btn-danger btn-sm">삭제</a>
+			<a href="list.jsp" class="btn btn-primary float-right btn-sm">목록</a>
+		</div>
+	 	-->
+		<div class="row mb-2"> <!-- mb-3은 아래쪽 여백을 3만큼 설정한다. -->
 			<div class="col-12">
 				<h3 class="border p-3 bg-light">상품 상세정보</h3>
 			</div>
 		</div>
+		
 		<div class="row mb-3">
 			<div class="col-12">
-				<table class="table table-bordered table-sm">
+				<table class="table table-bordered">
 					<colgroup>
 						<col width="15%">
 						<col width="35%">
@@ -68,11 +76,26 @@
 				</table>
 			</div>
 		</div>
-		<!-- 리뷰 등록폼 시작 -->
+
 		
+
 		<%
 			if(loginedUser != null){
+				String fail = request.getParameter("fail");
+				
+				if("blank".equals(fail)){
 		%>
+		<div class="row mb-1">
+			<div class="col-12">
+				<div class="alert alert-danger">
+					<strong>입력값 누락</strong> 리뷰내용이 누락되었습니다.
+				</div>
+			</div>			
+		</div>
+		<%
+				}
+		%>
+		<!-- 리뷰 등록폼 시작 -->
 		<div class="row mb-2">
 			<div class="col-12">
 				<form method="post" action="insertreview.jsp" class="border bg-light p-2">
@@ -99,54 +122,53 @@
 		%>
 		<!-- 리뷰 등록폼 끝 -->
 		<%
+			//SAMPLE_PRODUCT_REVIEWS테이블에 대한 CRUD 기능이 구현된 ReviewDao 객체 획득하기
 			ReviewDao reviewDao = ReviewDao.getInstance();
+			//ReviewDao객체의 getReviewsByProductNo(상품번호)를 실행해서 Review정보 목록을 획득한다.
 			List<Review> reviews = reviewDao.getReviewsByProductNo(productNo);
 		%>
 		<!-- 리뷰 목록 시작 -->
 		<div class="row">
 			<div class="col-12">
-				<div class="list-group">
-					<!-- 리뷰 아이템 반복 시작-->
-					<ul class="list-group">
+				<ul class="list-group">
 					<%
 						if(loginedUser == null){
 							if(reviews.isEmpty()){							
 					%>
-						<li class="list-group-item text-center">
-							<h5 class="mb-1">등록된 리뷰가 없습니다. 로그인 후 리뷰를 등록하세요.</h5>
-						</li>
+					<!-- 리뷰 아이템 반복 시작-->
+					<li class="list-group-item text-center">
+						<p class="mb-1">등록된 리뷰가 없습니다. 로그인 후 리뷰를 등록하세요.</p>
+					</li>
 					<%
 							}
 						}else if(loginedUser != null){
 							if(reviews.isEmpty()){
 					%>				
-						<li class="list-group-item text-center">
-								<h5 class="mb-1">등록된 리뷰가 없습니다. 리뷰를 등록하세요.</h5>
-						</li>				
+					<li class="list-group-item text-center">
+							<p class="mb-1">등록된 리뷰가 없습니다. 리뷰를 등록하세요.</p>
+					</li>				
 					<%
-							}else{for(Review review : reviews){
+							}}
+						for(Review review : reviews){
 					%>
-						<li class="list-group-item">
-							<div class="d-flex w-100 justify-content-between">
-								<h5 class="mb-1"><%=review.getTitle() %></h5>
-								<%
-									if(loginedUser != null && review.getUserId().equals(loginedUser.getId())){
-								%>
-								<a href="" class="btn btn-outline-danger btn-sm">삭제</a>
-								<%
-									}
-								%>
-							</div>
-							<p><%=review.getContent() %></p>
-						</li>
-					<%
+					<li class="list-group-item">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1"><strong><%=review.getTitle() %></strong></h5>
+							<%
+								if(loginedUser != null && review.getUserId().equals(loginedUser.getId())){
+							%>
+							<a href="deletereview.jsp?productNo=<%=productNo %>&page=<%=pageNo %>&reviewNo=<%=review.getNo() %>" class="btn btn-outline-danger btn-sm">삭제</a>
+							<%
 								}
-							}
+							%>
+						</div>
+						<p class="mb-0"><%=review.getContent() %></p>
+					</li>
+					<!-- 리뷰 아이템 반복 끝 -->
+					<%
 						}
 					%>
-					</ul>	
-					<!-- 리뷰 아이템 반복 끝 -->
-				</div>
+				</ul>	
 			</div>
 		</div>
 		<!-- 리뷰목록 끝 -->

@@ -10,21 +10,23 @@ import com.sample.vo.Review;
 
 public class ReviewDao {
 
-	private SqlSessionFactory sqlSessionFactory;
-	
+	/*
+	 싱글턴 관련된 것들만 모아두려고 factory를 아래다 작성
+	 */
 	private static ReviewDao instance = new ReviewDao();
 	private ReviewDao() {
 		this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory();
 	}
-	
-	/**
-	 * 미리 생성된 ReviewDao 객체를 반환한다.
-	 * @return ReviewDao
-	 */
 	public static ReviewDao getInstance() {
 		return instance;
-	}
+	} 
+
+	private SqlSessionFactory sqlSessionFactory;
 	
+	/**
+	 * 리뷰정보를 전달받아서 SAMPLE_PRODUCT_REVIEWS에 저장한다.
+	 * @param review 리뷰정보
+	 */
 	public void insertReview(Review review) {
 		SqlSession session = sqlSessionFactory.openSession(true);
 		session.insert("insertReview", review);
@@ -32,14 +34,36 @@ public class ReviewDao {
 	}
 	
 	/**
-	 * 상품번호로 전달받아서 해당하는 상품정보의 SAMPLE_PRODUCT_REVIEWS 테이블에서 조회해서 반환한다.
-	 * @param no 상품번호
-	 * @return 리뷰 목록
+	 * 상품번호로 전달받아서 SAMPLE_PRODUCT_REVIEWS에서 해당 상품과 관련된 모든 리뷰들을 반환한다.
+	 * @param productNo 리뷰를 조회할 상품번호
+	 * @return 리뷰 리스트
 	 */
-	public List<Review> getReviewsByProductNo(int no) {
+	public List<Review> getReviewsByProductNo(int productNo) {
 		SqlSession session = sqlSessionFactory.openSession();
-		List<Review> reviews = session.selectList("getReviewsByProductNo",no);
+		List<Review> reviews = session.selectList("getReviewsByProductNo",productNo);
 		session.close();
 		return reviews;
+	}
+	
+	/**
+	 * 리뷰번호를 전달받아서 SAMPLE_PRODUCT_REVIEWS에서 리뷰번호에 해당하는 리뷰를 반환한다.
+	 * @param reviewNo 조회할 리뷰번호
+	 * @return 리뷰정보
+	 */
+	public Review getReviewByNo(int reviewNo) {
+		SqlSession session = sqlSessionFactory.openSession();
+		Review review = session.selectOne("getReviewByNo",reviewNo);
+		session.close();
+		return review;
+	}
+	
+	/**
+	 * 리뷰번호를 전달받아서 SAMPLE_PRODUCT_REVIEWS에서 리뷰번호에 해당하는 리뷰를 삭제한다.
+	 * @param reviewNo 삭제할 리뷰번호
+	 */
+	public void deletedReview(int reviewNo) {
+		SqlSession session = sqlSessionFactory.openSession(true);
+		session.delete("deleteReview", reviewNo);
+		session.close();
 	}
 }

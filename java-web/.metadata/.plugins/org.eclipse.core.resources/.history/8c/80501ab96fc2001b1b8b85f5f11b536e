@@ -1,0 +1,16 @@
+package com.sample.vo;
+
+import java.util.Date;
+
+public class Board {
+
+	private int no;
+	private String title;
+	private String content;
+	private int viewCount;
+	private String deleted;
+	private String userId;
+	private Date createdDate;
+	private Date updatedDate;
+	private Date deletedDate;
+}

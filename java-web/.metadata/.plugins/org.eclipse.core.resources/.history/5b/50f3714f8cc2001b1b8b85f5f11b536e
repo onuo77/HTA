@@ -1,0 +1,18 @@
+<%@page import="com.sample.util.CommonUtils"%>
+<%@page import="com.sample.dao.ReviewDao"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+
+	User sessionSavedUser = (User) session.getAttribute("LOGINED_USER_INFO");
+
+	int productNo = CommonUtils.stringToInt(request.getParameter("productNo"));
+	int pageNo = CommonUtils.stringToInt(request.getParameter("page"));
+	
+	int reviewNo = CommonUtils.stringToInt(request.getParameter("reviewNo"));
+
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	reviewDao.deletedReview(reviewNo);
+	
+	response.sendRedirect("detail.jsp?no="+ productNo +"&page="+ pageNo);
+%>

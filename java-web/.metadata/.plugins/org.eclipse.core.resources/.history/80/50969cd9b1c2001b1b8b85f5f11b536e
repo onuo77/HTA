@@ -1,0 +1,12 @@
+package com.sample.dao;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+
+public class BoardDao {
+	
+	private SqlSessionFactory sqlSessionFactory;
+	private BoardDao instance = new BoardDao();
+	private static BoardDao BoardDao() {
+		return instance;
+	}
+}
