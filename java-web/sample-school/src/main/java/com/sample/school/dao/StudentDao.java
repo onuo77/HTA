@@ -26,9 +26,9 @@ public class StudentDao {
 	 * @param studentId 학생아이디
 	 * @return 학생정보
 	 */
-	public List<Student> getStudentById(String studentId) {
+	public Student getStudentById(String studentId) {
 		SqlSession session = sqlSessionFactory.openSession();
-		List<Student> students = session.selectList("getStudentById",studentId);
-		return students;
+		Student student = session.selectOne("getStudentById",studentId);
+		return student;
 	}
 }

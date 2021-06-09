@@ -13,6 +13,12 @@
 		String navItem = "loginform";
 	%>
 	<%@ include file="common/header.jsp" %>
+	<%
+		String fail = request.getParameter("fail");
+		if("blank".equals(fail)){
+			
+		}
+	%>
 	<main>
 		<div class="row mb-3">
 			<div class="col-12">

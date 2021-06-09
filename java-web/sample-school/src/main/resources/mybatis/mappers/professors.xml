@@ -5,15 +5,20 @@
   
 <mapper namespace="professors">
 	
-	<insert id="insertProfessor" parameterType="com.sample.school.vo.professor">
+	<insert id="insertProfessor" parameterType="com.sample.school.vo.Professor">
 		insert into sample_school_professors
 		(professor_id, professor_password, professor_name, professor_position, department_no)
 		values
 		(#{id},#{password},#{name},#{position},#{departmentNo})
 	</insert>
 
-	<select id="getProfessorById" parameterType="string" resultType="com.sample.school.vo.professor">
-		select professor_id, professor_name, professor_password, professor_position, department_no
+	<select id="getProfessorById" parameterType="string" resultType="com.sample.school.vo.Professor">
+		select 
+			professor_id as id, 
+			professor_name as name, 
+			professor_password as password, 
+			professor_position as position, 
+			department_no as departmentNo
 		from sample_school_professors
 		where professor_id = #{value}
 	</select>

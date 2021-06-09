@@ -1,3 +1,4 @@
+<%@page import="com.sample.school.vo.Professor"%>
 <%@page import="com.sample.school.dao.ProfessorDao"%>
 <%@page import="com.sample.school.vo.Student"%>
 <%@page import="java.util.List"%>
@@ -25,33 +26,36 @@
 	String password = request.getParameter("password");
 	String userType = request.getParameter("usertype");
 	
+	if(userId.isBlank() || password.isBlank()){
+		response.sendRedirect("loginForm.jsp?fail=blank");
+		return;
+	}
+
 	if("student".equals(userType)){
 		StudentDao studentDao = StudentDao.getInstance();
-		List<Student> students = studentDao.getStudentById(userId);
-		for(Student student : students){
-			if(userId.equals(student.getId())){
-				LoginUser loginUser = new LoginUser();
-				loginUser.setNo(student.getGrade());
-				loginUser.setName(student.getName());
-				loginUser.setUserType("student");
-				loginUser.setDepartmentNo(student.getDepartmentNo());
-				
-				session.setAttribute("LOGINED_USER", loginUser);
-			}
+		Student student = studentDao.getStudentById(userId);
+		
+		LoginUser loginUser = new LoginUser();
+		if(userId.equals(student.getId())){
+			loginUser.setId(userId);
+			loginUser.setName(student.getName());
+			loginUser.setUserType("student");
+			loginUser.setDepartmentNo(student.getDepartmentNo());
+			
+			session.setAttribute("LOGINED_USER", loginUser);
 		}
+		
 	}else if("professor".equals(userType)){
 		ProfessorDao professorDao = ProfessorDao.getInstance();
-		List<Student> students = professorDao.getProfessorById(userId);
-		for(Student student : students){
-			if(userId.equals(student.getId())){
-				LoginUser loginUser = new LoginUser();
-				loginUser.setNo(student.getGrade());
-				loginUser.setName(student.getName());
-				loginUser.setUserType("student");
-				loginUser.setDepartmentNo(student.getDepartmentNo());
-				
-				session.setAttribute("LOGINED_USER", loginUser);
-			}
+		Professor professor = professorDao.getProfessorById(userId);
+		if(userId.equals(professor.getId())){
+			LoginUser loginUser = new LoginUser();
+			loginUser.setId(userId);
+			loginUser.setName(professor.getName());
+			loginUser.setUserType("professor");
+			loginUser.setDepartmentNo(professor.getDepartmentNo());
+			
+			session.setAttribute("LOGINED_USER", loginUser);
 		}
 	}
 	
