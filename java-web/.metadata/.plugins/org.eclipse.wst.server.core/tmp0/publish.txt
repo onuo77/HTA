@@ -1,4 +1,4 @@
 #Tomcat publish data
-#Tue Jun 08 15:48:47 KST 2021
-org.eclipse.jst.jee.server\:sample-servlet=C\:\\Program Files\\Apache Software Foundation\\Tomcat 10.0\\wtpwebapps\\sample-servlet
+#Wed Jun 09 15:35:02 KST 2021
 org.eclipse.jst.jee.server\:sample-school=C\:\\Program Files\\Apache Software Foundation\\Tomcat 10.0\\wtpwebapps\\sample-school
+org.eclipse.jst.jee.server\:sample-script=C\:\\Program Files\\Apache Software Foundation\\Tomcat 10.0\\wtpwebapps\\sample-script
