@@ -1,3 +1,6 @@
+<%@page import="com.sample.school.dto.CourseDto"%>
+<%@page import="java.util.List"%>
+<%@page import="com.sample.school.dao.CourseDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!doctype html>
 <html lang="ko">
@@ -21,7 +24,20 @@
 	
 %>
 <div class="container">
+	<% 
+		String navItem = "pfCourses"; 
+	%>
 	<%@ include file="../common/header.jsp" %>
+	<%
+		if(loginedUser == null) {
+			response.sendRedirect("/sample-school/loginForm.jsp");
+			return;
+		}
+		String professorId = loginedUser.getId();
+		CourseDao courseDao = CourseDao.getInstance();
+		List<CourseDto> courseDto = courseDao.getCoursesByProfessorId(professorId);
+		
+	%>
 	<main>
 		<div class="row mb-3">
 			<div class="col-12">
@@ -53,46 +69,30 @@
 							</tr>
 						</thead>
 						<tbody>
+						<%
+							if(courseDto.isEmpty()){			
+						%>
 							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>10/30</td>
-								<td>전기공학과</td>
+								<td>등록된 과정정보가 존재하지 않습니다.</td>
+							</tr>
+						<%
+							}else{
+								for(CourseDto course : courseDto){
+						%>
+							<tr>
+								<td><%=course.getNo() %></td>
+								<td><%=course.getName() %></td>
+								<td><%=course.getType() %></td>
+								<td><%=course.getRegisteredCount() %>/<%=course.getQuota() %></td>
+								<td><%=course.getDepartmentName() %></td>
 								<td>
-									<a href="students.jsp?courseNo=40000000" class="btn btn-info btn-sm">수강생 조회</a>
+									<a href="students.jsp?courseNo=<%=course.getNo() %>" class="btn btn-info btn-sm">수강생 조회</a>
 								</td>
 							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>10/30</td>
-								<td>전기공학과</td>
-								<td>
-									<a href="students.jsp?courseNo=40000000" class="btn btn-info btn-sm">수강생 조회</a>
-								</td>
-							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>10/30</td>
-								<td>전기공학과</td>
-								<td>
-									<a href="students.jsp?courseNo=40000000" class="btn btn-info btn-sm">수강생 조회</a>
-								</td>
-							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>10/30</td>
-								<td>전기공학과</td>
-								<td>
-									<a href="students.jsp?courseNo=40000000" class="btn btn-info btn-sm">수강생 조회</a>
-								</td>
-							</tr>
+						<%
+								}
+							}
+						%>
 						</tbody>
 					</table>
 				</div>

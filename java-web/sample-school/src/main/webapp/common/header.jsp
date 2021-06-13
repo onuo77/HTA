@@ -15,33 +15,41 @@
           			<li class="nav-item">
             			<a class="nav-link <%="home".equals(navItem) ?"active":"" %>" aria-current="page" href="/sample-school">홈</a>
           			</li>
+          			<%
+          				if(loginedUser != null && "professor".equals(loginedUser.getUserType())){
+          			%>
           			<li class="nav-item dropdown">
           				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             				교수회원
           				</a>
           				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            				<li><a class="dropdown-item" href="/sample-school/professor/courses.jsp">개설과정 현황</a></li>
+            				<li><a class="dropdown-item <%="pfCourses".equals(navItem) ?"active":"" %>" href="/sample-school/professor/courses.jsp">개설과정 현황</a></li>
             				<li><a class="dropdown-item disabled" href="/sample-school/professor/courseForm.jsp">신규 과정 개설</a></li>
             				<li><hr class="dropdown-divider"></li>
             				<li><a class="dropdown-item disabled" href="/sample-school/professor/registerForm.jsp">교수회원 가입</a></li>
           				</ul>
         			</li>
+        			<%
+          				}else if(loginedUser != null && "student".equals(loginedUser.getUserType())){
+        			%>
           			<li class="nav-item dropdown">
           				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             				학생회원
           				</a>
           				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            				<li><a class="dropdown-item" href="/sample-school/student/courses.jsp">개설과정 조회</a></li>
-            				<li><a class="dropdown-item" href="/sample-school/student/myList.jsp">수강신청내역 조회</a></li>
-            				<li><hr class="dropdown-divider"></li>
-            				<li><a class="dropdown-item <%="studentRegisterform".equals(navItem)?"active":"" %>" href="/sample-school/student/registerForm.jsp">학생회원 가입</a></li>
+            				<li><a class="dropdown-item  <%="sCourses".equals(navItem) ?"active":"" %>" href="/sample-school/student/courses.jsp">개설과정 조회</a></li>
+            				<li><a class="dropdown-item <%="myList".equals(navItem)?"active":"" %>" href="/sample-school/student/myList.jsp">수강신청내역 조회</a></li>
           				</ul>
         			</li>
+        			<%
+          				}
+        			%>
         		</ul>
         		<ul class="navbar-nav">
         			<%
           				if(loginedUser == null){
           			%>
+      				<li><a class="nav-link <%="studentRegisterform".equals(navItem)?"active":"" %>" href="/sample-school/student/registerForm.jsp">학생회원 가입</a></li>
           			<li class="nav-item">
             			<a class="nav-link <%="loginform".equals(navItem) ? "active" : "" %>" href="/sample-school/loginForm.jsp">로그인</a>
           			</li>

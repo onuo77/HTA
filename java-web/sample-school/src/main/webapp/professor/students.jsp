@@ -1,3 +1,9 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.sample.school.dto.CourseRegisteredStudentDto"%>
+<%@page import="java.util.List"%>
+<%@page import="com.sample.school.dao.RegistrationDao"%>
+<%@page import="com.sample.school.vo.Course"%>
+<%@page import="com.sample.school.dao.CourseDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!doctype html>
 <html lang="ko">
@@ -14,7 +20,18 @@
 	*/
 %>
 <div class="container">
+	<% String navItem = "pfCourses"; %>
 	<%@ include file="../common/header.jsp" %>
+	<%
+		if(loginedUser == null) {
+			response.sendRedirect("/sample-school/loginForm.jsp");
+			return;
+		}
+		
+		int courseNo = Integer.parseInt(request.getParameter("courseNo"));
+		CourseDao courseDao = CourseDao.getInstance();
+		Course course = courseDao.getCourseByNo(courseNo);
+	%>
 	<main>
 		<div class="row mb-3">
 			<div class="col-12">
@@ -35,21 +52,21 @@
 						</colgroup>
 						<tr>
 							<th>과정번호</th>
-							<td>40000000</td>
+							<td><%=course.getNo() %></td>
 							<th>타입</th>
-							<td>전공필수</td>
+							<td><%=course.getType() %></td>
 						</tr>
 						<tr>
 							<th>과정명</th>
-							<td>전기전자 기초 실험 1</td>
+							<td><%=course.getName() %></td>
 							<th>신청/정원</th>
-							<td>11/30</td>
+							<td><%=course.getRegisteredCount() %>/<%=course.getQuota() %></td>
 						</tr>
 						<tr>
 							<th>강의장</th>
-							<td>201호</td>
+							<td><%=course.getRoom() %></td>
 							<th>건물명</th>
-							<td>공대1호관</td>
+							<td><%=course.getBuilding() %></td>
 						</tr>
 					</table>
 				</div>
@@ -84,39 +101,34 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>60000000</td>
-								<td>홍길동</td>
-								<td>1학년</td>
-								<td>전기공학과</td>
-								<td>신청완료</td>
-								<td>N</td>
-								<td></td>
-								<td></td>
-								<td>2021-03-01</td>
+						<%
+							RegistrationDao regiDao = RegistrationDao.getInstance();
+							List<CourseRegisteredStudentDto> students = regiDao.getRegisteredStudentsByCourseNo(courseNo);
+							SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+							if(students.isEmpty()){
+						%>
+							<tr class="text-center">
+								<td colspan="9">수강생이 존재하지 않습니다.</td>
 							</tr>
+						<%		
+							}else{
+								for(CourseRegisteredStudentDto student : students){
+						%> 
 							<tr>
-								<td>60000000</td>
-								<td>홍길동</td>
-								<td>1학년</td>
-								<td>전기공학과</td>
-								<td>신청완료</td>
-								<td>N</td>
-								<td></td>
-								<td></td>
-								<td>2021-03-01</td>
+								<td><%=student.getId() %></td>
+								<td><%=student.getName() %></td>
+								<td><%=student.getGrade() %></td>
+								<td><%=student.getDepartmentName() %></td>
+								<td><%=student.getCourseStatus() %></td>
+								<td><%=student.getCoursePassed() %></td>
+								<td><%=student.getCourseScore() %></td>
+								<td><%=student.getCourseGrade()==null?"":"" %></td>
+								<td><%=dateformat.format(student.getCreatedDate())%></td>
 							</tr>
-							<tr>
-								<td>60000000</td>
-								<td>홍길동</td>
-								<td>1학년</td>
-								<td>전기공학과</td>
-								<td>수강완료</td>
-								<td>Y</td>
-								<td>91</td>
-								<td>A</td>
-								<td>2021-03-01</td>
-							</tr>
+						<%
+								}
+							}
+						%>
 						</tbody>
 					</table>
 				</div>

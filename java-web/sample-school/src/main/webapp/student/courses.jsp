@@ -1,3 +1,11 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.sample.school.dao.RegistrationDao"%>
+<%@page import="com.sample.school.dto.CourseRegisteredStudentDto"%>
+<%@page import="com.sample.school.dao.CourseDao"%>
+<%@page import="com.sample.school.dto.CourseDto"%>
+<%@page import="com.sample.school.vo.Department"%>
+<%@page import="java.util.List"%>
+<%@page import="com.sample.school.dao.DepartmentDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!doctype html>
 <html lang="ko">
@@ -29,7 +37,22 @@
 	*/
 %>
 <div class="container">
+	<% String navItem = "sCourses"; %>
 	<%@ include file="../common/header.jsp" %>
+	<%
+		//모든학과정보
+		DepartmentDao departmentDao =DepartmentDao.getInstance();
+		List<Department> department = departmentDao.getAllDepartments();
+		
+		//로그인되지 않은 사용자 로그인폼으로 이동
+		if(loginedUser == null){
+			response.sendRedirect("/sample-school/loginForm.jsp");
+			return;
+		} 
+		
+		String departmentNo = request.getParameter("departmentNo");
+		CourseDao courseDao = CourseDao.getInstance();
+	%>
 	<main>
 		<div class="row mb-3">
 			<div class="col-12">
@@ -46,15 +69,19 @@
     						<label for="department-no" class="col-2 col-form-label">학과를 선택하세요</label>
     						<div class="col-9">
       							<select class="form-control" name="departmentNo">
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
-									<option value="20000000"> 전기공학과</option>
+								<%
+									for(Department dept : department){ 
+										if(departmentNo == null){
+								%>
+											<option value="<%=dept.getNo()%>"> <%=dept.getName() %></option>
+								<% 
+										} else{
+								%>
+									<option value="<%=dept.getNo()%>" <%=dept.getNo()==Integer.parseInt(departmentNo)?"selected":""%>> <%=dept.getName() %></option>
+								<%
+										}
+									}
+								%>
 								</select>
     						</div>
     						<div class="col-1">
@@ -94,50 +121,46 @@
 							</tr>
 						</thead>
 						<tbody>
+						<%
+							if(departmentNo == null){
+								int loginedUserDeptNo = loginedUser.getDepartmentNo();
+								List<CourseDto> loginedUserDepts = courseDao.getCoursesByDepartmentNo(loginedUserDeptNo);
+								for(CourseDto dept : loginedUserDepts){
+						%>
 							<tr>
-								<td>40000000</td>
-								<td>전기전자 실험1</td>
-								<td>전공선택</td>
-								<td>10/30</td>
-								<td>201호</td>
-								<td>공대3호관</td>
-								<td>201호</td>
-								<td>전기공학과</td>
-								<td><a href="requestCourse.jsp?courseNo=40000000" class="btn btn-primary btn-sm">신청</a></td>
+								<td><%=dept.getNo() %></td>
+								<td><%=dept.getName() %></td>
+								<td><%=dept.getType() %></td>
+								<td><%=dept.getRegisteredCount() %>/<%=dept.getQuota() %></td>
+								<td><%=dept.getRoom() %></td>
+								<td><%=dept.getBuilding() %></td>
+								<td><%=dept.getProfessorName() %></td>
+								<td><%=dept.getDepartmentName() %></td>
+								<td><a href="requestCourse.jsp?courseNo=<%=dept.getNo() %>" class="btn btn-primary btn-sm">신청</a></td>
 							</tr>
+						<%
+								}
+							}else{
+								List<CourseDto> courseDto = courseDao.getCoursesByDepartmentNo(Integer.parseInt(departmentNo)); 
+								for(CourseDto dept : courseDto){
+						%>
 							<tr>
-								<td>40000000</td>
-								<td>전기전자 실험1</td>
-								<td>전공선택</td>
-								<td>10/30</td>
-								<td>201호</td>
-								<td>공대3호관</td>
-								<td>홍길동</td>
-								<td>전기공학과</td>
-								<td><a href="requestCourse.jsp?courseNo=40000000" class="btn btn-primary btn-sm">신청</a></td>
+								<td><%=dept.getNo() %></td>
+								<td><%=dept.getName() %></td>
+								<td><%=dept.getType() %></td>
+								<td><%=dept.getRegisteredCount() %>/<%=dept.getQuota() %></td>
+								<td><%=dept.getRoom() %></td>
+								<td><%=dept.getBuilding() %></td>
+								<td><%=dept.getProfessorName() %></td>
+								<td><%=dept.getDepartmentName() %></td>
+								<td>
+									<a href="requestCourse.jsp?courseNo=<%=dept.getNo() %>" class="btn btn-primary btn-sm">신청</a>
+								</td>
 							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 실험1</td>
-								<td>전공선택</td>
-								<td>10/30</td>
-								<td>201호</td>
-								<td>공대3호관</td>
-								<td>홍길동</td>
-								<td>전기공학과</td>
-								<td><a href="requestCourse.jsp?courseNo=40000000" class="btn btn-primary btn-sm">신청</a></td>
-							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 실험1</td>
-								<td>전공선택</td>
-								<td>10/30</td>
-								<td>201호</td>
-								<td>공대3호관</td>
-								<td>홍길동</td>
-								<td>전기공학과</td>
-								<td><a href="requestCourse.jsp?courseNo=40000000" class="btn btn-primary btn-sm">신청</a></td>
-							</tr>
+						<%
+								}
+							}
+						%>
 						</tbody>
 					</table>
 				</div>

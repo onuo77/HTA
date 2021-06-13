@@ -8,7 +8,7 @@ public class Registration {
 	private int courseNo;
 	private int year;
 	private int term;
-	private int studentNo;
+	private String studentNo;
 	private int score;
 	private String grade;
 	private String status;
@@ -49,11 +49,11 @@ public class Registration {
 		this.term = term;
 	}
 
-	public int getStudentNo() {
+	public String getStudentNo() {
 		return studentNo;
 	}
 
-	public void setStudentNo(int studentNo) {
+	public void setStudentNo(String studentNo) {
 		this.studentNo = studentNo;
 	}
 

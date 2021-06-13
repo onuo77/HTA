@@ -5,4 +5,89 @@
   
 <mapper namespace="registrations">
 	
+	<insert id="insertRegistration" parameterType="com.sample.school.vo.Registration">
+		insert into SAMPLE_SCHOOL_REGISTRATIONS
+		(REGISTRATION_NO, COURSE_NO, REGISTRATION_YEAR, REGISTRATION_TERM, STUDENT_ID)
+		values
+		(REGISTRATION_SEQ.nextval, #{courseNo}, #{year}, #{term}, #{studentNo})
+	</insert>
+	
+	<update id="updateRegistration" parameterType="com.sample.school.dto.CourseRegisteredStudentDto">
+		update SAMPLE_SCHOOL_REGISTRATIONS
+		set
+			REGISTRATION_STATUS = #{courseStatus}
+		where
+			COURSE_NO = #{courseNo}
+	</update>
+	
+	<select id="getRegisteredStudentByCourseNo" parameterType="int" resultType="com.sample.school.dto.CourseRegisteredStudentDto">
+		select
+		    r.COURSE_NO as courseNo,
+		    c.course_year as year,
+		    c.course_term as term,
+		    c.course_type as type,
+		    c.COURSE_NAME as name,
+		    r.STUDENT_ID as id,
+		    r.COURSE_SCORE as courseScore,
+		    r.COURSE_GRADE as courseGrade,
+		    r.REGISTRATION_STATUS as courseStatus,
+		    r.COURSE_PASSED as coursePassed,
+		    r.REGISTRATION_CREATED_DATE as createdDate,
+		    d.department_no as departmentNo,
+		    d.department_name as departmentName
+		from 
+		    SAMPLE_SCHOOL_REGISTRATIONS r, SAMPLE_SCHOOL_COURSES c, SAMPLE_SCHOOL_DEPARTMENTS d
+		where 
+		    r.course_no = c.course_no
+		and c.department_no = d.department_no
+		and r.COURSE_NO = #{value}
+	</select>
+
+	<select id="getRegisteredStudentsByCourseNo" parameterType="int" resultType="com.sample.school.dto.CourseRegisteredStudentDto">
+        select
+		    r.COURSE_NO as courseNo,
+		    c.course_year as year,
+		    c.course_term as term,
+		    c.course_type as type,
+		    r.STUDENT_ID as id,
+		    s.student_name as name,
+		    r.COURSE_SCORE as courseScore,
+		    r.COURSE_GRADE as courseGrade,
+		    r.REGISTRATION_STATUS as courseStatus,
+		    r.COURSE_PASSED as coursePassed,
+		    r.REGISTRATION_CREATED_DATE as createdDate,
+		    d.department_no as departmentNo,
+		    d.department_name as departmentName,
+            s.STUDENT_GRADE as grade
+		from 
+		    SAMPLE_SCHOOL_REGISTRATIONS r, SAMPLE_SCHOOL_COURSES c, SAMPLE_SCHOOL_DEPARTMENTS d, sample_school_students s
+		where 
+		    r.course_no = c.course_no
+		and c.department_no = d.department_no
+        and r.student_id = s.student_id
+		and r.COURSE_NO = #{value}
+	</select>
+
+	<select id="getRegisteredStudentsByStudentId" parameterType="string" resultType="com.sample.school.dto.CourseRegisteredStudentDto">
+		select
+		    r.COURSE_NO as courseNo,
+		    c.course_year as year,
+		    c.course_term as term,
+		    c.course_type as type,
+		    c.COURSE_NAME as name,
+		    r.STUDENT_ID as id,
+		    r.COURSE_SCORE as courseScore,
+		    r.COURSE_GRADE as grade,
+		    r.REGISTRATION_STATUS as courseStatus,
+		    r.COURSE_PASSED as coursePassed,
+		    r.REGISTRATION_CREATED_DATE as createdDate,
+		    d.department_no as departmentNo,
+		    d.department_name as departmentName
+		from 
+		    SAMPLE_SCHOOL_REGISTRATIONS r, SAMPLE_SCHOOL_COURSES c, SAMPLE_SCHOOL_DEPARTMENTS d
+		where 
+		    r.course_no = c.course_no
+		and c.department_no = d.department_no
+		and r.STUDENT_ID = #{value}
+	</select>	
 </mapper>

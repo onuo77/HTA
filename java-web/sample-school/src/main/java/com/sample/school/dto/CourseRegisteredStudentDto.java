@@ -5,7 +5,7 @@ import java.util.Date;
 public class CourseRegisteredStudentDto {
 
 	private int courseNo;
-	private int id;					// 학생아이디
+	private String id;					// 학생아이디
 	private String name;			// 학생이름
 	private int grade;				// 학생학년
 	private int departmentNo;		// 소속학과번호
@@ -15,8 +15,42 @@ public class CourseRegisteredStudentDto {
 	private int courseScore;		// 점수
 	private String courseGrade;		// 성적
 	private Date createdDate;		// 수강신청등록일
+	private int year;
+	private int term;
+	private String type;
 	
 	public CourseRegisteredStudentDto() {}
+
+	
+	public int getYear() {
+		return year;
+	}
+
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+
+	public int getTerm() {
+		return term;
+	}
+
+
+	public void setTerm(int term) {
+		this.term = term;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 
 	public int getCourseNo() {
 		return courseNo;
@@ -26,11 +60,11 @@ public class CourseRegisteredStudentDto {
 		this.courseNo = courseNo;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -14,7 +14,7 @@ public class Course {
 	private String building;
 	private String available;
 	private int registeredCount;
-	private int professorNo;
+	private String professorNo;
 	private int departmentNo;
 	private Date createdDate;
 	
@@ -100,11 +100,11 @@ public class Course {
 		this.registeredCount = registeredCount;
 	}
 
-	public int getProfessorNo() {
+	public String getProfessorNo() {
 		return professorNo;
 	}
 
-	public void setProfessorNo(int professorNo) {
+	public void setProfessorNo(String professorNo) {
 		this.professorNo = professorNo;
 	}
 
