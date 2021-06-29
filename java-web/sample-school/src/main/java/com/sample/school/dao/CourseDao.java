@@ -36,11 +36,11 @@ public class CourseDao {
 	 * @param courseNo 개설과정번호
 	 * @return 개설과정정보
 	 */
-	public CourseDto getCourseByNo(int courseNo) {
+	public Course getCourseByNo(int courseNo) {
 		SqlSession session = sqlSessionFactory.openSession();
-		CourseDto courseDto = session.selectOne("getCourseByNo", courseNo);
+		Course course = session.selectOne("getCourseByNo", courseNo);
 		session.close();
-		return courseDto;
+		return course;
 	}
 	
 	/**
@@ -60,9 +60,9 @@ public class CourseDao {
 	 */
 	public List<CourseDto> getCoursesByDepartmentNo(int departmentNo) {
 		SqlSession session = sqlSessionFactory.openSession();
-		List<CourseDto> CourseDto = session.selectList("getCoursesByDepartmentNo",departmentNo);
+		List<CourseDto> Courses = session.selectList("getCoursesByDepartmentNo",departmentNo);
 		session.close();
-		return CourseDto;
+		return Courses;
 	}
 	
 	/**
@@ -72,8 +72,8 @@ public class CourseDao {
 	 */
 	public List<CourseDto> getCoursesByProfessorId(String professorId) {
 		SqlSession session = sqlSessionFactory.openSession();
-		List<CourseDto> CourseDto = session.selectList("getCoursesByProfessorId",professorId);
+		List<CourseDto> Courses = session.selectList("getCoursesByProfessorId",professorId);
 		session.close();
-		return CourseDto;
+		return Courses;
 	}
 }

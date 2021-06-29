@@ -1,3 +1,9 @@
+<%@page import="com.sample.school.vo.Course"%>
+<%@page import="com.sample.school.dao.RegistrationDao"%>
+<%@page import="com.sample.school.vo.Registration"%>
+<%@page import="com.sample.school.dto.CourseDto"%>
+<%@page import="com.sample.school.dao.CourseDao"%>
+<%@page import="com.sample.school.vo.LoginUser"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%
 	/*
@@ -12,6 +18,28 @@
 		6. Registration의 insertRegistraion(과정등록정보)를 실행해서 저자안다.
 		7. myList.jsp를 재요청하는 URL을 응답으로 보낸다.;
 	*/
+	
+	LoginUser loginUser = (LoginUser) session.getAttribute("LOGINED_USER");
+	if(loginUser == null){
+		response.sendRedirect("/sample-school/loginForm.jsp");
+		return;
+	}
+	
+	int courseNo = Integer.parseInt(request.getParameter("courseNo"));
+	CourseDao courseDao = CourseDao.getInstance();
+	Course course = courseDao.getCourseByNo(courseNo);
+	
+	course.setRegisteredCount(course.getRegisteredCount()+1);
+	courseDao.updateCourse(course);
+	
+	Registration registration = new Registration();
+	registration.setCourseNo(courseNo);
+	registration.setYear(course.getYear());
+	registration.setTerm(course.getTerm());
+	registration.setStudentNo(loginUser.getId());
+	
+	RegistrationDao regiDao = RegistrationDao.getInstance();
+	regiDao.insertRegistration(registration);
 	
 	response.sendRedirect("/sample-school/student/myList.jsp");
 %>

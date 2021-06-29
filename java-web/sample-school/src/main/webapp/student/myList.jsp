@@ -1,3 +1,6 @@
+<%@page import="java.util.List"%>
+<%@page import="com.sample.school.dao.RegistrationDao"%>
+<%@page import="com.sample.school.dto.CourseRegisteredStudentDto"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!doctype html>
 <html lang="ko">
@@ -18,7 +21,16 @@
 	*/
 %>
 <div class="container">
+	<% String navItem = "myList";%>
 	<%@ include file="../common/header.jsp" %>
+	<%
+		if(loginedUser == null){
+			response.sendRedirect("/sample-school/loginForm.jsp");
+			return;
+		}
+		RegistrationDao regiDao = RegistrationDao.getInstance();
+		List<CourseRegisteredStudentDto> loginedUserCourses = regiDao.getRegisteredStudentsByStudentId(loginedUser.getId());	
+	%>
 	<main>
 		<div class="row mb-3">
 			<div class="col-12">
@@ -52,54 +64,35 @@
 							</tr>
 						</thead>
 						<tbody>
+						<%
+							if(loginedUserCourses.isEmpty()){
+						%>
+							<tr class="text-center">
+								<td colspan="8">신청한 수강내역이 존재하지 않습니다.</td>
+							</tr>
+						<%
+							}else{
+								for(CourseRegisteredStudentDto item : loginedUserCourses){
+						%>
 							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>2021/1</td>
-								<td></td>
-								<td>N</td>
-								<td><span class="badge bg-info">신청</span></td>
+								<td><%=item.getCourseNo() %></td>
+								<td><%=item.getName() %></td>
+								<td><%=item.getType() %></td>
+								<td><%=item.getYear() %>/<%=item.getTerm() %></td>
+								<td><%=item.getCourseScore() %></td>
+								<td><%=item.getCoursePassed() %></td>
+								<td><span class="badge <%="신청".equals(item.getCourseStatus())?"bg-info":"bg-secondary"%>"><%=item.getCourseStatus() %></span></td>
 								<td>
-									<a href="cancelCourse.jsp?no=40000000" class="btn btn-warning btn-sm">수강철회</a>
+								<%
+									if("신청".equals(item.getCourseStatus())){
+								%>
+									<a href="cancelCourse.jsp?no=<%=item.getCourseNo() %>" class="btn btn-warning btn-sm">수강철회</a>
+								<%
+									}	
+								%>
 								</td>
 							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>2021/1</td>
-								<td></td>
-								<td>N</td>
-								<td><span class="badge bg-danger">취소</span></td>
-								<td>
-									<a href="cancelCourse.jsp?no=40000000" class="btn btn-secondary btn-sm disabled">수강철회</a>
-								</td>
-							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>2021/1</td>
-								<td>A</td>
-								<td>Y</td>
-								<td><span class="badge bg-info">신청</span></td>
-								<td>
-									<a href="cancelCourse.jsp?no=40000000" class="btn btn-secondary btn-sm disabled">수강철회</a>
-								</td>
-							</tr>
-							<tr>
-								<td>40000000</td>
-								<td>전기전자 기초실험 1</td>
-								<td>전공필수</td>
-								<td>2021/1</td>
-								<td>A</td>
-								<td>Y</td>
-								<td><span class="badge bg-info">신청</span></td>
-								<td>
-									<a href="cancelCourse.jsp?no=40000000" class="btn btn-secondary btn-sm disabled">수강철회</a>
-								</td>
-							</tr>
+						<% }}%>
 						</tbody>
 					</table>
 				</div>

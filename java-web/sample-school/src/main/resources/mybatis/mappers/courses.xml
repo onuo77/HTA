@@ -13,22 +13,13 @@
 		(course_seq.nextval,#{name},#{type},#{year},#{term},#{quota},#{room},#{building},#{available},#{registeredCount},#{professorNo},#{departmentNo})
 	</insert>
 	
-	<update id="updateCourse">
+	<update id="updateCourse" parameterType="com.sample.school.vo.Course">
 		update 
 			sample_school_courses
 		set
-			COURSE_NO = #{no},
-			COURSE_NAME = #{name},
-			COURSE_TYPE = #{type},
-			COURSE_YEAR = #{year},
-			COURSE_TERM = #{term},
-			COURSE_QUOTA = #{quota},
-			COURSE_ROOM = #{room},
-			COURSE_BUILDING = #{building},
-			COURSE_AVAILABLE = #{available},
-			COURSE_REGISTERED_COUNT = #{registeredCount},
-			PROFESSOR_ID = #{professorNo},
-			DEPARTMENT_NO = #{departmentNo}
+			COURSE_REGISTERED_COUNT = #{registeredCount}
+		where
+			COURSE_NO = #{no}
 	</update>
 	
 	<select id="getCourseByNo" parameterType="int" resultType="com.sample.school.vo.Course">
@@ -52,45 +43,56 @@
 			course_no = #{value}
 	</select>
 	
-	<select id="getCoursesByDepartmentNo" parameterType="int" resultType="com.sample.school.vo.Course">
-		select
-			COURSE_NO as no,
-			COURSE_NAME as name,
-			COURSE_TYPE as type,
-			COURSE_YEAR as year,
-			COURSE_TERM as term,
-			COURSE_QUOTA as quota,
-			COURSE_ROOM as room,
-			COURSE_BUILDING as building,
-			COURSE_AVAILABLE as available,
-			COURSE_REGISTERED_COUNT as registeredCount,
-			PROFESSOR_ID as professorNo,
-			DEPARTMENT_NO as departmentNo,
-			COURSE_CREATED_DATE as createdDate
-		from
-			sample_school_courses
-		where 
-			department_no = #{value}
+	<select id="getCoursesByDepartmentNo" parameterType="int" resultType="com.sample.school.dto.CourseDto">
+    select 
+            c.COURSE_NO as no,
+			c.COURSE_NAME as name,
+			c.COURSE_TYPE as type,
+			c.COURSE_YEAR as year,
+			c.COURSE_TERM as term,
+			c.COURSE_QUOTA as quota,
+			c.COURSE_ROOM as room,
+			c.COURSE_BUILDING as building,
+			c.COURSE_AVAILABLE as available,
+			c.COURSE_REGISTERED_COUNT as registeredCount,
+			c.PROFESSOR_ID as professorNo,
+            p.professor_name as professorName,
+			c.DEPARTMENT_NO as departmentNo,
+            d.department_name as departmentName,
+			c.COURSE_CREATED_DATE as createdDate
+    from sample_school_courses c, 
+        sample_school_professors p, 
+        sample_school_departments d
+    where 
+        c.professor_id = p.professor_id
+        and c.department_no = d.department_no
+        and c.department_no = #{value}
 	</select>
 	
-	<select id="getCoursesByProfessorId" parameterType="string" resultType="com.sample.school.vo.Course">
-		select
-			COURSE_NO as no,
-			COURSE_NAME as name,
-			COURSE_TYPE as type,
-			COURSE_YEAR as year,
-			COURSE_TERM as term,
-			COURSE_QUOTA as quota,
-			COURSE_ROOM as room,
-			COURSE_BUILDING as building,
-			COURSE_AVAILABLE as available,
-			COURSE_REGISTERED_COUNT as registeredCount,
-			PROFESSOR_ID as professorNo,
-			DEPARTMENT_NO as departmentNo,
-			COURSE_CREATED_DATE as createdDate
-		from
-			sample_school_courses
-		where 
-			PROFESSOR_ID = #{value}		
+	<select id="getCoursesByProfessorId" parameterType="string" resultType="com.sample.school.dto.CourseDto">
+	    select 
+	            c.COURSE_NO as no,
+				c.COURSE_NAME as name,
+				c.COURSE_TYPE as type,
+				c.COURSE_YEAR as year,
+				c.COURSE_TERM as term,
+				c.COURSE_QUOTA as quota,
+				c.COURSE_ROOM as room,
+				c.COURSE_BUILDING as building,
+				c.COURSE_AVAILABLE as available,
+				c.COURSE_REGISTERED_COUNT as registeredCount,
+				c.PROFESSOR_ID as professorNo,
+	            p.professor_name as professorName,
+				c.DEPARTMENT_NO as departmentNo,
+	            d.department_name as departmentName,
+				c.COURSE_CREATED_DATE as createdDate
+	    from sample_school_courses c, 
+	        sample_school_professors p, 
+	        sample_school_departments d
+	    where 
+	        c.professor_id = p.professor_id
+	        and c.department_no = d.department_no
+	        and c.PROFESSOR_ID = #{value}
 	</select>
+	
 </mapper>

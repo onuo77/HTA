@@ -14,8 +14,8 @@ public class CourseDto {
 	private String building;
 	private String available;
 	private int registeredCount;
-	private int professorNo;
-	private int professorName;
+	private String professorNo;
+	private String professorName;
 	private int departmentNo;
 	private String departmentName;
 	private Date createdDate;
@@ -104,19 +104,19 @@ public class CourseDto {
 		this.registeredCount = registeredCount;
 	}
 
-	public int getProfessorNo() {
+	public String getProfessorNo() {
 		return professorNo;
 	}
 
-	public void setProfessorNo(int professorNo) {
+	public void setProfessorNo(String professorNo) {
 		this.professorNo = professorNo;
 	}
 
-	public int getProfessorName() {
+	public String getProfessorName() {
 		return professorName;
 	}
 
-	public void setProfessorName(int professorName) {
+	public void setProfessorName(String professorName) {
 		this.professorName = professorName;
 	}
 
