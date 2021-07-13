@@ -37,7 +37,7 @@ public class UserService{
 			throw new MallBusinessException("["+user.getEmail()+"]은 이미 등록된 이메일 입니다.");
 		}
 		List<User> savedUsers = userMapper.getUserInfoByPhone(user.getPhone());
-		if(savedUsers.isEmpty()) {
+		if(!savedUsers.isEmpty()) {
 			throw new MallBusinessException("["+user.getPhone()+"]은 이미 등록된 전화번호 입니다.");
 		}
 		
@@ -53,4 +53,22 @@ public class UserService{
 		user.setPoint(defaultDepositPoint);
 		userMapper.updateUser(user); 
 	}
+	
+	/**
+	 * 아이디를 전달받아서 사용자정보를 삭제한다.
+	 * @param userId 사용자아이디
+	 */
+	public void removeUser(String userId) {
+		userMapper.deleteUser(userId);
+	}
+	
+	/**
+	 * 아이디를 전달받아서 조회된 사용자 정보를 반환한다.
+	 * @param userId 아이디
+	 * @return 사용자정보
+	 */
+	public User getUserDetail(String userId) {
+		return userMapper.getUserInfoById(userId);
+	}
+	
 }

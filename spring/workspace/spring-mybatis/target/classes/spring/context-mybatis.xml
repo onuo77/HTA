@@ -20,10 +20,11 @@
 	-->
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-		p:driverClassName="${db.driverClassName}"
-		p:url="${db.url}"
-		p:username="${db.username}"
-		p:password="${db.password}"></bean>
+	      p:driverClassName="${db.driverClassName}"
+	      p:url="${db.url}" 
+	      p:username="${db.username}"
+	      p:password="${db.password}">
+   </bean>
 	
 	<!-- Spring과 mybatis 연동시키기 -->
 	<!-- 

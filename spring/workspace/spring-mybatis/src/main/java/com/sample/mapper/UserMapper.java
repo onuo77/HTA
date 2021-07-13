@@ -11,7 +11,12 @@ public interface UserMapper {
 	 * @param user 전달된 사용자 정보
 	 */
 	void insertUser(User user);
-	
+
+	/**
+	 * 사용자 아이디를 전달받아서 해당 사용자의 정보를 삭제한다.
+	 * @param userId 
+	 */
+	void deleteUser(String userId);
 	/**
 	 * 변경된 사용자 정보를 전달받아서 반영하기
 	 * @param user 변경된 정보를 포함하고 있는 사용자 정보

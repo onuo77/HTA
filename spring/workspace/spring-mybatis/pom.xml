@@ -187,6 +187,22 @@
         </dependency>
         -->
         
+		<!-- 단위테스트를 지원하는 스프링 모듈 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>4.3.25.RELEASE</version>
+		    <scope>test</scope>
+		</dependency>
+		
+        <!-- 단위테스트 케이스 생성 및 실행을 지원하는 라이브러리 의존성 -->
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.13.2</version>
+		    <scope>test</scope>
+		</dependency>
+        
 	</dependencies>
 
 	<build>

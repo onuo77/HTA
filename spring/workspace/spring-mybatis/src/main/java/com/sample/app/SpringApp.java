@@ -16,27 +16,27 @@ public class SpringApp {
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring/context-mybatis.xml");
 		
-//		ProductService service = context.getBean(ProductService.class);
-//		List<Product> products = service.getAllProductList();
+		ProductService service = context.getBean(ProductService.class);
+		List<Product> products = service.getAllProductList();
 
-//		for(Product product : products) {
-//	         System.out.println("상품번호 : " + product.getNo());
-//	         System.out.println("상품명 : " + product.getName());
-//	         System.out.println("카테고리 : " + product.getCategory());
-//	         System.out.println("메이커 : " + product.getMaker());
-//	         System.out.println("가격 : " + product.getPrice());
-//	         System.out.println("할인가 : " + product.getDiscountPrice());
-//	      }
+		for(Product product : products) {
+	         System.out.println("상품번호 : " + product.getNo());
+	         System.out.println("상품명 : " + product.getName());
+	         System.out.println("카테고리 : " + product.getCategory());
+	         System.out.println("메이커 : " + product.getMaker());
+	         System.out.println("가격 : " + product.getPrice());
+	         System.out.println("할인가 : " + product.getDiscountPrice());
+	      }
 		
-		UserService userService = context.getBean(UserService.class);
-		
-		User user = new User();
-		user.setId("hong1000");
-		user.setName("홍길동");
-		user.setPassword("zxcv1234");
-		user.setEmail("hong1000@gmail.com");
-		user.setPhone("010-1234-2222");
-		
-		userService.addNewUser(user);
+//		UserService userService = context.getBean(UserService.class);
+//		
+//		User user = new User();
+//		user.setId("hong10000");
+//		user.setName("홍길동");
+//		user.setPassword("zxcv1234");
+//		user.setEmail("hong10000@gmail.com");
+//		user.setPhone("010-1554-2222");
+//		
+//		userService.addNewUser(user);
 	}
 }
