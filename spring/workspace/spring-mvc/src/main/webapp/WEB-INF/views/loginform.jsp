@@ -9,7 +9,7 @@
 <title>샘플 애플리케이션</title>
 </head>
 <body>
-<c:set var="menu" value="login"></c:set>
+<c:set var="menu" value="login" />
 <%@ include file="common/nav.jsp" %>
 <div class="container my-3">
 	<main>
@@ -131,24 +131,24 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-$(function(){
-	//입력값 유효성 체크해서 아이디와 비밀번호가 전부 값이 입력되어 있을 때만 폼 입력값이 서버로 제출되게 하기
-	$("#form-login").submit(function(){
-		var userId = $.trim($('#user-id').val());
-		if(!userId){
+$(function() {
+	// 입력값 유효성 체크해서 아이디와 비밀번호가 전부 값이 입력되어 있을 때만 폼 입력값이 서버로 제출되게 하기
+	$("#form-login").submit(function() {
+		var id = $.trim($("#user-id").val());
+		if (!id) {
 			alert("아이디는 필수입력값입니다.");
 			$("#user-id").focus();
 			return false;
 		}
-		var password = $.trim($('#user-password').val());
-		if(!password){
+		var password = $.trim($("#user-password").val());
+		if (!password) {
 			alert("비밀번호는 필수입력값입니다.");
 			$("#user-password").focus();
 			return false;
 		}
 		
 		return true;
-	})
+	});
 })
 </script>
 </body>
