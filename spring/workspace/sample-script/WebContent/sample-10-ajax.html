@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>샘플 애플리케이션</title>
+</head>
+<body>
+<div class="container my-3">
+	<div class="row mb-3">
+		<div class="col">
+			<div class="border p-2 bg-dark text-white fw-bold">Ajax</div>
+		</div>
+	</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(function() {
+
+	// 요청파라미터값을 전달하고, 텍스트를 응답으로 받기
+	// 클라이언트가 서버로 보내는 값 : idcheck?id=hong
+	// 서버가 클라이언트로 보내는 값 : "exist" 중 "none" 하나가 응답으로 온다. 
+	$.ajax({
+		url:"idcheck",
+		data: {id:"hong"},
+		dataType:"text",
+		success:function(textContent) {
+			console.log(textContent);	// exist혹은 none가 출력됨
+		}
+	})
+	
+	$.ajax({
+		url:"idcheck",
+		data: "id=hong",
+		dataType:"text",
+		success:function(textContent) {
+			console.log(textContent);	// exist혹은 none가 출력됨
+		}
+	})
+	
+	/*
+	위의 요청을 처리하는 컨트롤러의 요청핸들러 메소드 정의하기
+	@RequestMapping("/idcheck")
+	public @ResponseBody String idCheck(@RequestParam("id") String userId) {
+		String result = search.아이디중복체크(userId);
+		return result;
+	}
+	
+	@RequestMapping("/idcheck")
+	public @ResponseBody ResponseEntity<String> idCheck(@RequestParam("id") String userId) {
+		String result = search.아이디중복체크(userId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	*/
+	
+	
+	
+	
+	
+	
+			
+	// 요청파라미터값을 전달하고, json형식의 텍스트를 응답으로 받기
+	// 클라이언트가 서버로 보내는 값 : search?opt=title&keyword=자바&page=1
+	// 서버가 클라이언트로 보내는 값 : [{"no":100, "title":"이것이자바다", "price":30000}, {"no":200, "title":"자바의 정석", "price":28000}]
+	$.ajax({
+		url:"search",
+		data: {otp:"title", keyword:"자바", page:1},
+		dataType:'json',
+		success: function(books) {
+			console.log(books);	// books는 자바스크립트 배열이다 <-- 배열표기법의 json텍스트를 응답으로 받아서 자바스크립트 배열로 변환한 다음 함수실행시 전달한다.
+								// [{no:100, title:"이것이자바다", price:30000}, {no:200, title:"자바의 정석", price:28000}]
+			$.each(books, function(index, book) {
+				// book객체의 정보를 활용해서 HTML 컨텐츠를 생성하고, 화면의 특정 영역에 반영한다.
+			})
+		}
+	});
+	
+	$.ajax({
+		url:"search",
+		data: "opt=title&keyword=자바&page=1",
+		dataType:'json',
+		success: function(books) {
+			console.log(books);	// books는 자바스크립트 배열이다 <-- 배열표기법의 json텍스트를 응답으로 받아서 자바스크립트 배열로 변환한 다음 함수실행시 전달한다.
+								// [{no:100, title:"이것이자바다", price:30000}, {no:200, title:"자바의 정석", price:28000}]
+			$.each(books, function(index, book) {
+				// book객체의 정보를 활용해서 HTML 컨텐츠를 생성하고, 화면의 특정 영역에 반영한다.
+			})
+		}
+	});
+	
+	/*
+	<form id="search-form">
+		<input type="hidden" name="page" value ="1">
+		<select name="opt">
+			<option value="title"> 제목</option>
+			<option value="writer"> 저자</option>
+			<option value="publisher"> 출판사</option>
+		</select>
+		<input type="text" name="keyword">
+	</form>
+	*/
+	$.ajax({
+		url:"search",
+		data: $("#search-form").serialize(),	// "opt=title&keyword=자바&page=1" 와 같은 형식으로 폼입력값을 변환해서 전달한다.
+		dataType:'json',
+		success: function(books) {
+			console.log(books);	// books는 자바스크립트 배열이다 <-- 배열표기법의 json텍스트를 응답으로 받아서 자바스크립트 배열로 변환한 다음 함수실행시 전달한다.
+								// [{no:100, title:"이것이자바다", price:30000}, {no:200, title:"자바의 정석", price:28000}]
+			$.each(books, function(index, book) {
+				// book객체의 정보를 활용해서 HTML 컨텐츠를 생성하고, 화면의 특정 영역에 반영한다.
+			})
+		}
+	});
+	
+	/*
+		위의 요청을 처리하는 요청핸들러 메소드 정의하기
+		@GetMapping("/search")
+		public @Response List<Book> searchBooks(@RequestParam("opt") String searchOption,
+												@RequestParam("keyword") String searchKeyword,
+												@RequestParam(value="page", required=false, defaultValue="1") int page) {
+			List<Book> books = searchs.searchBooks(searchOption, searchKeyword, page);
+			
+			return books
+		}
+		@GetMapping("/search")
+		public @Response List<Book> searchBooks(Map<String, Object> searchMap) {	// searchMap-> opt:title, keyword:자바, page:1
+			List<Book> books = searchs.searchBooks(searchMap);
+			
+			return books
+		}
+		@GetMapping("/search")
+		public @Response List<Book> searchBooks(SearchForm form) {	// searchMap-> opt:title, keyword:자바, page:1
+			List<Book> books = searchs.searchBooks(searchMap);
+			
+			return books
+		}
+		
+		
+		@GetMapping("/search")
+		public @Response ResponeEntity<Book> searchBooks(@RequestParam("opt") String searchOption,
+												@RequestParam("keyword") String searchKeyword,
+												@RequestParam(value="page", required=false, defaultValue="1") int page) {
+			List<Book> books = searchs.searchBooks(searchOption, searchKeyword, page);
+			
+			return new ResponseEntity<>(books, HttpStatus.Ok);
+		}
+		@GetMapping("/search")
+		public @Response List<Book> searchBooks(Map<String, Object> searchMap) {	// searchMap-> opt:title, keyword:자바, page:1
+			List<Book> books = searchs.searchBooks(searchMap);
+			
+			return new ResponseEntity<>(books, HttpStatus.Ok);
+		}
+		@GetMapping("/search")
+		public @Response List<Book> searchBooks(SearchForm form) {	// searchMap-> opt:title, keyword:자바, page:1
+			List<Book> books = searchs.searchBooks(searchMap);
+		
+			return new ResponseEntity<>(books, HttpStatus.Ok);
+		}
+	*/
+	
+	
+	
+	
+	
+	// json형식의 텍스트를 전달하고, 텍스트를 응답으로 받기
+	// 문의글 작성하기
+	// 클라이언트가 서버로 보내는 값 : {"title":"주문관련문의", "content":"결재를 취소하고 싶어요", "type":"결재"}
+	// 서버가 클라이언트로 보내는 값 : "success" 혹은 "fail"
+	
+	// json형식의 텍스트를 전달하고, json형식의 텍스트를 응답으로 받기
+	// 문의글 작성하기
+	// 클라이언트가 서버로 보내는 값 : {"title":"주문관련문의", "content":"결재를 취소하고 싶어요", "type":"결재"}
+	// 서버가 클라이언트로 보내는 값 : {"no":1000, "title":"주문관련문의", "content":"결재를 취소하고 싶어요", "type":"결재", "createdDate":"0221-08-04"}
+
+	
+})
+</script>
+</body>
+</html>
+
+
+
+
+
+

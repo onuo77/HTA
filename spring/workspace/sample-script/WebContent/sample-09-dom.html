@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>샘플 애플리케이션</title>
+</head>
+<body>
+<div class="container my-3">
+	<div class="row mb-3">
+		<div class="col">
+			<div class="border p-2 bg-dark text-white fw-bold">도서 목록</div>
+		</div>
+	</div>
+	<div class="row mb-1">
+		<div class="col">
+			<div class="border px-2 py-1 bg-primary text-white fw-bold">베스트 셀러</div>
+		</div>
+	</div>
+	<div class="row mb-1">
+		<div class="col">
+			<table class="table" id="table-bestseller-books">
+				<colgroup>
+					<col width="5%">
+					<col width="5%">
+					<col width="*">
+					<col width="10%">
+					<col width="15%">
+					<col width="10%">
+					<col width="10%">
+					<col width="7%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center"><input type="checkbox"></th>
+						<th class="text-center">번호</th>
+						<th class="text-center">제목</th>
+						<th class="text-center">작가</th>
+						<th class="text-center">출판사</th>
+						<th class="text-end">가격</th>
+						<th class="text-end">할인가격</th>
+						<th class="text-center"></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col text-center">
+			<button class="btn btn-outline-primary" id="btn-move-selected-books">선택한 상품 담기</button>
+			<button class="btn btn-outline-primary" id="btn-move-all-books">전체 상품담기</button>
+		</div>
+	</div>
+
+	
+	<div class="row mb-1">
+		<div class="col">
+			<div class="border px-2 py-1 bg-warning text-white fw-bold">내가 선택한 책</div>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col">
+			<table class="table" id="table-selected-books">
+				<colgroup>
+					<col width="5%">
+					<col width="5%">
+					<col width="*">
+					<col width="10%">
+					<col width="15%">
+					<col width="10%">
+					<col width="10%">
+					<col width="7%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center"><input type="checkbox"></th>
+						<th class="text-center">번호</th>
+						<th class="text-center">제목</th>
+						<th class="text-center">작가</th>
+						<th class="text-center">출판사</th>
+						<th class="text-end">가격</th>
+						<th class="text-end">할인가격</th>
+						<th class="text-center"></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(function() {
+	// ajax를 실행해서 서버에서 받아온 책정보라고 가정함.
+	var books = [
+		{no:1001, title:"미래의 부", writer:"이지성", publisher:"차이정원", price:17000, discountPrice:15300},	
+		{no:1002, title:"달러구트 꿈 백화점 2", writer:"이미예", publisher:"팩토리나인", price:13500, discountPrice:12420},	
+		{no:1003, title:"흔한 남매 8", writer:"백난도", publisher:"미래앤아이세움", price:14000, discountPrice:12150},	
+		{no:1004, title:"강경원의 백 투 베이직", writer:"강경원", publisher:"세미콜론", price:21000, discountPrice:17550},	
+		{no:1005, title:"미드나잇 라이브러리", writer:"노진선", publisher:"인플루엔셜", price:16000, discountPrice:14200}	
+	];
+	
+	// 전체 선택/해제 체크박스의 상태가 변할 때 실행되는 요청핸들러 메소드 정의하기
+	$("#table-bestseller-books thead :checkbox, #table-selected-books thead :checkbox").change(function() {
+		/*
+			$(this) 															-> checkbox
+			$(this).closest("thead")											-> checkbox를 포함하고 있는 thead
+			$(this).closest("thead").next()										-> checkbox를 포함하고 있는 thead 다음에 있는 tbody
+			$(this).closest("thead").next().find(":checkbox")					-> checkbox를 포함하고 있는 thead 다음에 있는 tbody 안에 있는 checkbox
+			$(this).closest("thead").next().find(":checkbox:not(:disabled)")	-> checkbox를 포함하고 있는 thead 다음에 있는 tbody 안에 있는 checkbox중에서 비활성화상태가 아닌 checkbox
+		*/
+		$(this).closest("thead").next().find(":checkbox:not(:disabled)").prop("checked", $(this).prop("checked"));
+	});
+	
+	// 선택한 상품 담기 버튼을 클릭했을 때 실행되는 요청핸들러 메소드 정의하기
+	$("#btn-move-selected-books").click(function() {
+// 베스트셀러 책중에서 체크한 책이 있는지 확인한다.
+		var $checkedCheckboxes = $("#table-bestseller-books tbody :checkbox:checked");
+		if ($checkedCheckboxes.length == 0) {
+			alert("체크된 책이 하나도 없습니다.");
+			return false;
+		}
+// 체크된 체크박스가 포함된 행을 획득해서 책 정보를 조회한 다음 새로운 행을 만들어서 내가 선택한 책 테이블에 추가한다.
+		$checkedCheckboxes.each(function(index, checkbox) {
+			
+			var $tds = $(checkbox).closest("tr").find("td");
+			var no = $tds.eq(1).text();
+			var title = $tds.eq(2).text();
+			var writer = $tds.eq(3).text();
+			var publisher = $tds.eq(4).text();
+			var price = $tds.eq(5).text();
+			var discountPrice = $tds.eq(6).text();
+			
+			var row = '<tr data-book-no="'+no+'">'
+			row += '<td class="text-center"><input type="checkbox" name="bookNo" value="'+no+'" /></td>';
+			row += '<td class="text-center">'+no+'</td>';
+			row += '<td class="text-center">'+title+'</td>';
+			row += '<td class="text-center">'+writer+'</td>';
+			row += '<td class="text-center">'+publisher+'</td>';
+			row += '<td class="text-end">'+price+'</td>';
+			row += '<td class="text-end">'+discountPrice+'</td>';
+			row += '<td class="text-center"><button class="btn btn-danger btn-sm" data-book-no="'+no+'">삭제</td>';
+			row += "</tr>";
+			$("#table-selected-books tbody").append(row);
+// 책정보가 복사되고 나면 체크를 해제하고, 체크박스를 비활성화 한다.
+			$(checkbox).prop('checked', false).prop("disabled", true);
+// 같은 행에 있는 버튼을 비활성화하기
+			$tds.last().find("button").prop("disabled", true);
+		});
+		
+	});
+	
+	// 담기 버튼을 클릭했을 때 실행되는 요청핸들러 메소드 정의하기
+	$("#table-bestseller-books tbody").on('click', '.btn-primary', function() {
+// 클릭한 버튼이 포함된 tr을 찾기
+  // 1. 책번호로 찾기
+		// 클릭한 버튼에서 책번호 알아내기 <button data-book-no="1001">
+		//var selectedBookNo = $(this).data('book-no');
+		// 알아낸 책번호로 그 책정보가 있는 tr을 찾기 $("#table-bestseller-books tbody tr[data-book-no=1001]")
+	 	//var $selectedTr = $("#table-bestseller-books tbody tr[data-book-no="+selectedBookNo+"]")
+		
+  // 2. .closest(선택자)로 찾기
+		var $selectedTr = $(this).closest("tr");
+		
+// 획득된 tr의 책정보 획득하기
+		// 획득한 tr의 자식 엘리먼트인 td 전부 찾기 
+		// .find(선택자) 자손중에서 선택자에 해당하는 엘리먼트 전부 찾기
+		var $tds = $selectedTr.find('td'); 
+		
+		// 획득한 td들 중에서 1번째 td의 텍스트내용 조회하기
+		// .eq(인덱스) 검색된 엘리먼트 중에서 index번째의 엘리먼트 찾기
+		// $tds는 jQuery객체 -> { elemenets:[td0, td1, td2, td3, td4, td5, td6, ...], 메소드, 메소드, 메소드, 메소드, 메소드}
+		// $tds.eq(1)는 jQuery객체 -> {elements:[td1], 메소드, 메소드, 메소드}
+		var no = $tds.eq(1).text();
+		var title = $tds.eq(2).text();
+		var writer = $tds.eq(3).text();
+		var publisher = $tds.eq(4).text();
+		var price = $tds.eq(5).text();
+		var discountPrice = $tds.eq(6).text();
+
+// 조회된 책정보로 "내가 선택한 책 테이블"에 책정보를 추가하기 - 내일
+		var row = '<tr data-book-no="'+no+'">'
+		row += '<td class="text-center"><input type="checkbox" name="bookNo" value="'+no+'" /></td>';
+		row += '<td class="text-center">'+no+'</td>';
+		row += '<td class="text-center">'+title+'</td>';
+		row += '<td class="text-center">'+writer+'</td>';
+		row += '<td class="text-center">'+publisher+'</td>';
+		row += '<td class="text-end">'+price+'</td>';
+		row += '<td class="text-end">'+discountPrice+'</td>';
+		row += '<td class="text-center"><button class="btn btn-danger btn-sm" data-book-no="'+no+'">삭제</td>';
+		row += "</tr>";
+		$("#table-selected-books tbody").append(row);		
+		
+// 획득한 tr의 체크박스와 버튼을 비활성화하기
+		// 선택한 tr안에 있는 체크박스 비활성화하기
+		$selectedTr.find(':checkbox').prop("disabled", true);
+		// 지금 클릭한 버튼 비활성화하기
+		$(this).prop("disabled", true);
+		
+	});
+	
+	// 삭제버튼을 클릭했을 때 실행되는 함수 정의하기
+	$("#table-selected-books tbody").on('click', '.btn-danger', function() {
+// 클릭한 삭제버튼의 책번호 조회 및 해당 행을 삭제하기
+		//var bookNo = $(this).data('book-no');
+		//$(this).closest("tr").remove();
+		var bookNo = $(this).closest("tr").remove()	// button -> tr -> end() -> button 
+			.end()
+			.data('book-no');
+		
+// 베스트셀러에서 동일한 책번호의 책정보에 대한 체크박스와 담기 버튼을 활성화한다.
+		var $tr = $("#table-bestseller-books tr[data-book-no="+bookNo+"]");
+		$tr.find(":checkbox").prop("disabled", false);
+		$tr.find(".btn-primary").prop("disabled", false);		
+	});
+	
+	
+	// 배열에 저장된 값을 table-bestseller-books 테이블의 tbody에 추가하기
+	(function() {
+		// 베스트셀러 테이블의 tbody를 선택자로 조회하고, tbody 내부를 비운다.
+		var $tbody = $("#table-bestseller-books tbody").empty();
+		
+		// 조회된 데이터가 배열인 경우, 반드시 $.each(배열, 콜백)로 데이터를 처리하자
+		$.each(books, function(index, book) {
+			var row = '<tr data-book-no="'+book.no+'">'
+			row += '<td class="text-center"><input type="checkbox" name="bookNo" value="'+book.no+'" /></td>';
+			row += '<td class="text-center">'+book.no+'</td>';
+			row += '<td class="text-center">'+book.title+'</td>';
+			row += '<td class="text-center">'+book.writer+'</td>';
+			row += '<td class="text-center">'+book.publisher+'</td>';
+			row += '<td class="text-end">'+book.price+'</td>';
+			row += '<td class="text-end">'+book.discountPrice+'</td>';
+			row += '<td class="text-center"><button class="btn btn-primary btn-sm" data-book-no="'+book.no+'">담기</td>';
+			row += "</tr>";
+			
+			$tbody.append(row);
+		})
+	})();
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div id="button-box-1">
+		<button>버튼</button>
+		<button>버튼</button>
+		<button>버튼</button>
+	</div>
+	
+	<div id="button-box-2">
+		<button>버튼</button>
+		<button>버튼</button>
+		<button>버튼</button>
+	</div>
+	
+	<div id="button-box-3">
+		<button>버튼</button>
+		<button>버튼</button>
+		<button>버튼</button>
+	</div>
+<script type="text/javascript">
+		var buttons1 = document.querySelectorAll("#button-box-1 button");
+		for (var i=0; i<3;  i++) {
+		   var btn1 = buttons1[i];
+		   btn1.onclick = function() {
+		      alert(i);
+		   }
+		}
+		
+		var buttons2 = document.querySelectorAll("#button-box-2 button");
+		for (var i=0; i<3;  i++) {
+		   var btn2 = buttons2[i];
+		   addEventHandler(btn2, i);
+		}	
+		function addEventHandler(btn, num){
+			btn.onclick = function(){
+				alert(num);
+			}
+		}
+</script>
+</body>
+</html>
